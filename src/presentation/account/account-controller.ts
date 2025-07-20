@@ -7,7 +7,7 @@ export const createAccountController = async (req: Request, res: Response) => {
   const account: Account = req.body;
   const result = await createNewAccount(account);
 
-  if (result.kind === 'success') {
+  if (result.kind === "success") {
     res.cookie(jwt, result.value.token, {
       httpOnly: true,
       secure: process.env.ENVIROMENT === "DEV" ? false : true,
@@ -15,12 +15,11 @@ export const createAccountController = async (req: Request, res: Response) => {
       maxAge,
     });
 
-    res
-      .status(result.value.code);
+    res.status(result.value.code);
     return;
   }
 
   res.status(result.error.code).json({
     message: result.error.msg,
   });
-}
+};

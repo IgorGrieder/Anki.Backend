@@ -1,6 +1,6 @@
-import { OpenAPIV3 } from 'openapi-types';
-import { accountPaths } from '../../presentation/account/account-swagger';
-import { ErrorSchema } from './components';
+import { OpenAPIV3 } from "openapi-types";
+import { accountPaths } from "../../presentation/account/account-swagger";
+import { ErrorSchema } from "./components";
 
 export const openApiDocument: OpenAPIV3.Document = {
   openapi: "3.0.0",

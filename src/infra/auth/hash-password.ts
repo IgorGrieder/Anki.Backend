@@ -9,4 +9,4 @@ export const hashPassword = async (account: Account): Promise<Account> => {
   } catch (error) {
     throw error;
   }
-}
+};

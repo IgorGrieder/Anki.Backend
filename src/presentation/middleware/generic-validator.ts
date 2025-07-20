@@ -2,17 +2,20 @@ import { Request, Response, NextFunction } from "express";
 import z from "zod";
 import { badRequest } from "../../shared/constants/http-code-constants";
 
-export const genericValidator = <T extends z.ZodRawShape>(schema: z.ZodObject<T>, target: 'body' | 'params' | 'query' = 'body') => {
+export const genericValidator = <T extends z.ZodRawShape>(
+  schema: z.ZodObject<T>,
+  target: "body" | "params" | "query" = "body"
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
     let data;
     switch (target) {
-      case 'body':
+      case "body":
         data = req.body;
         break;
-      case 'params':
+      case "params":
         data = req.params;
         break;
-      case 'query':
+      case "query":
         data = req.query;
         break;
       default:
@@ -25,9 +28,9 @@ export const genericValidator = <T extends z.ZodRawShape>(schema: z.ZodObject<T>
       res.status(badRequest).json({
         message: "Validation failed",
         errors: result.error.issues.map((err) => ({
-          path: err.path.join('.'),
+          path: err.path.join("."),
           message: err.message,
-          code: err.code
+          code: err.code,
         })),
       });
       return;
@@ -36,4 +39,3 @@ export const genericValidator = <T extends z.ZodRawShape>(schema: z.ZodObject<T>
     next();
   };
 };
-

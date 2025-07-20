@@ -5,4 +5,4 @@ export const internalServerErrorCode = 500;
 export const unauthorizedCode = 401;
 export const noContentCode = 204;
 export const badRequest = 400;
-export const created = 201; 
+export const created = 201;

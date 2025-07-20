@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { Types } from "mongoose";
 
 export type Account = Readonly<{
   username: string;
@@ -6,7 +6,8 @@ export type Account = Readonly<{
   password: string;
 }>;
 
-export type AccountMongoDocument = Readonly<Account & {
-  _id: Types.ObjectId;
-}>;
-
+export type AccountMongoDocument = Readonly<
+  Account & {
+    _id: Types.ObjectId;
+  }
+>;
