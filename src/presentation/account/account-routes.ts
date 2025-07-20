@@ -7,4 +7,3 @@ export const accountRouter = Router();
 
 accountRouter.post('/create-account', genericValidator(createAccountSchema), createAccountController);
 
-
