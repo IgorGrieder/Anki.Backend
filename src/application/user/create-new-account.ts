@@ -11,9 +11,8 @@ type success = { code: number; token: string };
 type error = { code: number; msg: string };
 
 export const createNewAccount = async (account: Account): Promise<Result<success, error>> => {
-  const accountPassHashed = await hashPassword(account);
-
   try {
+    const accountPassHashed = await hashPassword(account);
     const createdAccount = await createAccount(accountPassHashed);
     const token = generateJWT(createdAccount);
 

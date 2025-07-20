@@ -7,7 +7,6 @@ export const hashPassword = async (account: Account): Promise<Account> => {
     const hashedPassword = await bcrypt.hash(account.password, saltRounds);
     return { ...account, password: hashedPassword };
   } catch (error) {
-    console.log('Hashing error');
     throw error;
   }
 }
