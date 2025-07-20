@@ -24,4 +24,3 @@ export const createAccountController = async (req: Request, res: Response) => {
     message: result.error.msg,
   });
 }
-
