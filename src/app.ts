@@ -1,7 +1,7 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import connectDB from './infra/db/mongo/mongo';
+import { mongoConnection } from './infra/db/mongo/mongo';
 import { routeMux } from './presentation';
 import { httpMiddleware } from './presentation/middleware/http-middleware';
 import dotenv from "dotenv";
@@ -11,8 +11,8 @@ export const PORT = process.env.PORT;
 
 export const app: Application = express();
 
-export const setupStart = async (app: Application): Promise<void> => {
-  await connectDB();
+export const setupStart = async (app: Application) => {
+  await mongoConnection();
 
   app.use(
     cors({

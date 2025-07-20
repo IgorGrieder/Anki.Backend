@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 import { infoLogger } from "../../logger/info-logger";
 import { errorLogger } from "../../logger/error-logger";
 
-// Because we are using mongoose we will connect to our MongoDB Atlas using the ODM
-const connectDB = async (): Promise<void> => {
+export const mongoConnection = async () => {
   const connectionString: string = process.env.DB_STRING ?? '';
   try {
     await mongoose.connect(connectionString);
@@ -16,4 +15,3 @@ const connectDB = async (): Promise<void> => {
   }
 };
 
-export default connectDB;
