@@ -15,5 +15,12 @@ export const openApiDocument: OpenAPIV3.Document = {
     schemas: {
       Error: ErrorSchema,
     },
+    securitySchemes: {
+      BearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
   },
 };
