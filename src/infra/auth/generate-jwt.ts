@@ -9,7 +9,8 @@ export const generateJWT = (account: AccountMongoDocument): string => {
     email: account.email,
   };
 
-  const jwtSecret = process.env.SECRET_KEY_JWT ?? "";
+  const jwtSecret = process.env.SECRET_KEY_JWT;
+  if (!jwtSecret) throw Error("No JWT secret provided");
   return jsonwebtoken.sign(payload, jwtSecret, {
     expiresIn,
   });
