@@ -4,6 +4,7 @@ import {
   errorToken,
   expiredToken,
   unauthorizedMessage,
+  unexpectedError,
 } from "../../shared/constants/message-constants";
 import {
   internalServerErrorCode,
@@ -28,7 +29,15 @@ export const validateJWT = async (
   token: string
 ): Promise<Result<success, error>> => {
   try {
-    const decoded = await verifyToken(token, process.env.SECRET_KEY_JWT!);
+    const secret = process.env.SECRET_KEY_JWT;
+    if (!secret) {
+      return {
+        kind: "error",
+        error: { code: internalServerErrorCode, message: unexpectedError },
+      };
+    }
+
+    const decoded = await verifyToken(token, secret);
     return { kind: "success", value: { decoded } };
   } catch (err: any) {
     if (err.name === "TokenExpiredError") {
