@@ -1,13 +1,11 @@
 import { Types } from "mongoose";
 
-export type Account = Readonly<{
-  username: string;
-  email: string;
-  password: string;
-}>;
+export interface Account {
+  readonly username: string;
+  readonly email: string;
+  readonly password: string;
+}
 
-export type AccountMongoDocument = Readonly<
-  Account & {
-    _id: Types.ObjectId;
-  }
->;
+export interface AccountMongoDocument extends Account {
+  readonly _id: Types.ObjectId;
+}
