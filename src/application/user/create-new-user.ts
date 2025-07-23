@@ -12,21 +12,15 @@ import {
   internalServerErrorCode,
 } from "../../shared/constants/http-code-constants";
 import { unexpectedError } from "../../shared/constants/message-constants";
-import { Result } from "../../shared/types/types";
+import { GenericError, GenericSuccess, Result } from "../../shared/types/types";
 
-export interface Success {
-  code: number;
+interface Success extends GenericSuccess {
   token: string;
-}
-
-export interface Error {
-  code: number;
-  msg: string;
 }
 
 export const createNewAccount = async (
   user: CreateUserInput
-): Promise<Result<Success, Error>> => {
+): Promise<Result<Success, GenericError>> => {
   try {
     const userPassHashed = await hashPassword(user);
     const createdUser = await createUser(userPassHashed);
