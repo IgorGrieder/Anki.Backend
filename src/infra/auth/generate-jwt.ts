@@ -2,11 +2,11 @@ import { UserDocument } from "../../domain/user/user-types";
 import jsonwebtoken from "jsonwebtoken";
 import { expiresIn } from "../../shared/constants/jwt-constants";
 
-export const generateJWT = (account: UserDocument): string => {
+export const generateJWT = (user: UserDocument): string => {
   const payload = {
-    userId: account._id,
-    username: account.username,
-    email: account.email,
+    userId: user._id,
+    username: user.username,
+    email: user.email,
   };
 
   const jwtSecret = process.env.SECRET_KEY_JWT;

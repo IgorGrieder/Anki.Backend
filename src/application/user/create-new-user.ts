@@ -5,7 +5,7 @@ import { hashPassword } from "../../infra/auth/hash-password";
 import { isDuplicateKeyError } from "../../infra/db/mongo/mongo-errors";
 import { errorLogger } from "../../infra/logger/error-logger";
 import { createUser } from "../../infra/repositories/user-repository";
-import { validateWithSchema } from "../../infra/validator/custom-schema-validator";
+import { validateWithSchema } from "../../infra/validator/generic-schema-validator";
 import {
   badRequest,
   created,
@@ -40,7 +40,7 @@ export const createNewAccount = async (
     if (isDuplicateKeyError(err)) {
       return {
         kind: "error",
-        error: { code: badRequest, msg: "Email already in use" },
+        error: { code: badRequest, msg: "Email/username already in use" },
       };
     }
 
