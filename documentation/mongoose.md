@@ -5,3 +5,4 @@ To interact with MongoDB I will be using mongoose to enforce an schema to it. Wh
 - create an schema and a model
 - after that create an IModel interface in the domain to specify a document query return an attach to them
 - create indexes for queried by fields int eh collection
+- use the generic validator to check in runtime the DB return
