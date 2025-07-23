@@ -1,4 +1,4 @@
-import { userDocumentSchema } from "../domain/user-types";
+import { UserDocument, userDocumentSchema } from "../domain/user-types";
 import { CreateUserDto } from "./dtos/create-user-dto";
 import { generateJWT } from "../../../shared/infra/auth/generate-jwt";
 import { hashPassword } from "../../../shared/infra/auth/hash-password";
@@ -17,7 +17,6 @@ import {
   Result,
 } from "../../../shared/types/types";
 import { UserModel } from "../infra/persistance/user-model";
-import { UserDocument } from "../domain/user-types";
 
 interface Success extends GenericSuccess {
   token: string;
