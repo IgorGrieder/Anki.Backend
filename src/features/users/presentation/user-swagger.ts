@@ -46,10 +46,28 @@ const createUserSchema: OpenAPIV3.SchemaObject = {
   required: ["email", "password"],
 };
 
-const path = "/api/auth";
+const loginUserSchema: OpenAPIV3.SchemaObject = {
+  type: "object",
+  properties: {
+    login: {
+      type: "string",
+      description: "Username or email address.",
+      example: "jane.doe@example.com",
+    },
+    password: {
+      type: "string",
+      format: "password",
+      minLength: 6,
+      example: "Str0ngP@ssw0rd!",
+    },
+  },
+  required: ["login", "password"],
+};
+
+const userPath = "/api/user";
 
 export const userPaths: OpenAPIV3.PathsObject = {
-  [`${path}/create-user`]: {
+  [`${userPath}/create-user`]: {
     post: {
       tags: ["Authentication"],
       summary: "Create a new user account",
@@ -73,6 +91,41 @@ export const userPaths: OpenAPIV3.PathsObject = {
               },
             },
           },
+        },
+        ...commonResponses,
+      },
+    },
+  },
+  [`${userPath}/login`]: {
+    post: {
+      tags: ["Authentication"],
+      summary: "Login with username or email and password",
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: loginUserSchema,
+          },
+        },
+      },
+      responses: {
+        "200": {
+          description: "Login successful. JWT cookie is set.",
+          headers: {
+            "Set-Cookie": {
+              schema: {
+                type: "string",
+                example:
+                  "jwt=your-token-here; Max-Age=86400; Path=/; HttpOnly; SameSite=Strict",
+              },
+            },
+          },
+        },
+        "401": {
+          description: "Invalid credentials.",
+        },
+        "404": {
+          description: "User not found.",
         },
         ...commonResponses,
       },

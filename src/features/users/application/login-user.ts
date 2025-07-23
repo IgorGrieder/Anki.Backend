@@ -1,31 +1,75 @@
 import { UserModel } from "../infra/persistance/user-model";
-import { LoginUserInput } from "./dtos/create-user-dto";
+import { LoginUserDto } from "./dtos/login-user-dto";
+import { UserDocument, userDocumentSchema } from "../domain/user-types";
+import { validateWithSchema } from "../../../shared/infra/persistance/validators/generic-schema-validator";
+import { generateJWT } from "../../../shared/infra/auth/generate-jwt";
+import { errorLogger } from "../../../shared/infra/logger/error-logger";
+import {
+  unauthorizedCode,
+  notFoundCode,
+  internalServerErrorCode,
+  okCode,
+} from "../../../shared/constants/http-code-constants";
+import {
+  unexpectedError,
+  userNotFound,
+  invalidPassword,
+} from "../../../shared/constants/message-constants";
+import {
+  Result,
+  GenericError,
+  GenericSuccess,
+} from "../../../shared/types/types";
+import bcrypt from "bcryptjs";
 
-export const loginUser = async (user: LoginUserInput) => {
-  /*   try {*/
-  const result = await UserModel.findOne({
-    $or: [{ username: user.login }, { email: user.login }],
-  }).lean();
-  // TO-DO
+interface Success extends GenericSuccess {
+  token: string;
+}
 
-  //   // result will be null if it doesn't match
-  //   if (!result) {
-  //     return { success: false, code: notFoundCode };
-  //   }
-  //
-  //   // Defining if the password is valid
-  //   const isPasswordValid = await bcrypt.compare(password, result.password);
-  //
-  //   if (!isPasswordValid) {
-  //     return { success: false, code: unauthorizedCode };
-  //   }
-  //
-  //   // If the login is valid a token is created and sent back
-  //   const token = await LoginService.generateJWT(result);
-  //   return { success: true, code: okCode, token, user: result };
-  // } catch (error) {
-  //   console.log(error);
-  //   return { success: false, code: internalServerErrorCode };
-  // }
-  //};
+export const loginUser = async (
+  user: LoginUserDto
+): Promise<Result<Success, GenericError>> => {
+  try {
+    const result = await UserModel.findOne({
+      $or: [{ username: user.login }, { email: user.login }],
+    }).lean();
+
+    const data = validateWithSchema<UserDocument>(userDocumentSchema, result);
+
+    if (!result) {
+      return {
+        kind: "error",
+        error: { code: notFoundCode, msg: userNotFound },
+      };
+    }
+
+    if (!result.password_hash) {
+      return {
+        kind: "error",
+        error: { code: unauthorizedCode, msg: invalidPassword },
+      };
+    }
+    const isPasswordValid = await bcrypt.compare(
+      user.password,
+      result.password_hash
+    );
+    if (!isPasswordValid) {
+      return {
+        kind: "error",
+        error: { code: unauthorizedCode, msg: invalidPassword },
+      };
+    }
+
+    const token = generateJWT(data);
+    return {
+      kind: "success",
+      value: { code: okCode, token },
+    };
+  } catch (err: any) {
+    errorLogger("Error during user login", err);
+    return {
+      kind: "error",
+      error: { code: internalServerErrorCode, msg: unexpectedError },
+    };
+  }
 };
