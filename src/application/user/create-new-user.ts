@@ -1,8 +1,8 @@
-import { Account } from "../../domain/account/account-type";
+import { CreateUserInput } from "../../domain/user/user-types";
 import { generateJWT } from "../../infra/auth/generate-jwt";
 import { hashPassword } from "../../infra/auth/hash-password";
 import { isDuplicateKeyError } from "../../infra/db/mongo/mongo-errors";
-import { createAccount } from "../../infra/repositories/account-repository";
+import { createUser } from "../../infra/repositories/user-repository";
 import {
   badRequest,
   created,
@@ -11,16 +11,23 @@ import {
 import { unexpectedError } from "../../shared/constants/message-constants";
 import { Result } from "../../shared/types/types";
 
-type success = { code: number; token: string };
-type error = { code: number; msg: string };
+export interface Success {
+  code: number;
+  token: string;
+}
+
+export interface Error {
+  code: number;
+  msg: string;
+}
 
 export const createNewAccount = async (
-  account: Account
-): Promise<Result<success, error>> => {
+  user: CreateUserInput
+): Promise<Result<Success, Error>> => {
   try {
-    const accountPassHashed = await hashPassword(account);
-    const createdAccount = await createAccount(accountPassHashed);
-    const token = generateJWT(createdAccount);
+    const userPassHashed = await hashPassword(user);
+    const createdUser = await createUser(userPassHashed);
+    const token = generateJWT(createdUser);
 
     return { kind: "success", value: { code: created, token } };
   } catch (err: any) {

@@ -1,8 +1,8 @@
-import { AccountMongoDocument } from "../../domain/account/account-type";
+import { UserDocument } from "../../domain/user/user-types";
 import jsonwebtoken from "jsonwebtoken";
 import { expiresIn } from "../../shared/constants/jwt-constants";
 
-export const generateJWT = (account: AccountMongoDocument): string => {
+export const generateJWT = (account: UserDocument): string => {
   const payload = {
     userId: account._id,
     username: account.username,
