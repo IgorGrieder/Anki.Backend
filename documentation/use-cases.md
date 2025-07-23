@@ -12,7 +12,7 @@ export interface Success {
   token: string;
 }
 
-export interface Error {
+export interface GenericError {
   code: number;
   msg: string;
 }
