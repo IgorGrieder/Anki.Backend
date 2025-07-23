@@ -1,5 +1,5 @@
 import { openApiDocument } from "../infra/swagger/swagger";
-import { accountRouter } from "./account";
+import { accountRouter } from "./user";
 import { Application } from "express";
 import * as swaggerUi from "swagger-ui-express";
 

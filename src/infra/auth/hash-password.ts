@@ -1,11 +1,17 @@
-import { Account } from "../../domain/account/account-type";
+import { CreateUserInput } from "../../domain/user/user-types";
 import { saltRounds } from "../../shared/constants/jwt-constants";
 import bcrypt from "bcrypt";
 
-export const hashPassword = async (account: Account): Promise<Account> => {
+export const hashPassword = async (
+  user: CreateUserInput
+): Promise<CreateUserInput> => {
   try {
-    const hashedPassword = await bcrypt.hash(account.password, saltRounds);
-    return { ...account, password: hashedPassword };
+    if (!user.password) {
+      throw new Error("Password is not provided, cannot hash.");
+    }
+
+    const hashedPassword = await bcrypt.hash(user.password, saltRounds);
+    return { ...user, password: hashedPassword };
   } catch (error) {
     throw error;
   }

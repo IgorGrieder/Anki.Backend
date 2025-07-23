@@ -1,5 +1,5 @@
 import { OpenAPIV3 } from "openapi-types";
-import { accountPaths } from "../../presentation/account/account-swagger";
+import { userPaths } from "../../presentation/user/user-swagger";
 import { ErrorSchema } from "./components";
 
 export const openApiDocument: OpenAPIV3.Document = {
@@ -9,7 +9,7 @@ export const openApiDocument: OpenAPIV3.Document = {
     version: "1.0.0",
   },
   paths: {
-    ...accountPaths,
+    ...userPaths,
   },
   components: {
     schemas: {

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { IUser } from "./user-types";
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<IUser>(
   {
     username: {
       type: String,
@@ -25,7 +26,6 @@ const userSchema = new mongoose.Schema(
       type: String, // Not required with OAuth
     },
 
-    // Indicates if the user's email address has been confirmed.
     email_confirmed: {
       type: Boolean,
       default: false,
@@ -100,10 +100,8 @@ const userSchema = new mongoose.Schema(
 
 // --- Schema Indexes for Performance ---
 // Create indexes on fields that are frequently queried to improve performance.
-userSchema.index({ email: 1 }); // Index on email for fast lookups
-userSchema.index({ username: 1 }); // Index on username
-userSchema.index({ google_id: 1 }); // Index on Google ID
+userSchema.index({ email: 1 });
+userSchema.index({ username: 1 });
+userSchema.index({ google_id: 1 });
 
-const User = mongoose.model("User", userSchema);
-
-export default User;
+export const UserModel = mongoose.model<IUser>("User", userSchema);

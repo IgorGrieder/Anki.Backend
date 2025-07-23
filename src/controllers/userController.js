@@ -1,8 +1,23 @@
 import { Router } from "express";
 import LoginService from "../services/loginService.js";
 import Utils from "../utils/utils.js";
-import { badRequest, internalServerErrorCode, noContentCode, notFoundCode, okCode } from "../constants/codeConstants.js";
-import { emailAlreadyUsed, invalidArguments, logoutMessage, passwordChanged, unauthorizedMessage, unexpectedError, usernameAlreadyUsed, userNotFound } from "../constants/messageConstants.js";
+import {
+  badRequest,
+  internalServerErrorCode,
+  noContentCode,
+  notFoundCode,
+  okCode,
+} from "../constants/codeConstants.js";
+import {
+  emailAlreadyUsed,
+  invalidArguments,
+  logoutMessage,
+  passwordChanged,
+  unauthorizedMessage,
+  unexpectedError,
+  usernameAlreadyUsed,
+  userNotFound,
+} from "../constants/messageConstants.js";
 import { jwt, maxAge, sameSite } from "../constants/jwtConstants.js";
 
 // Router instance
@@ -92,38 +107,6 @@ userRoutes.post("/create-account", validateCreateAccount, async (req, res) => {
   }
 });
 
-userRoutes.post("/login", validateLogIn, async (req, res) => {
-  const { login, password } = req.body;
-  const result = await LoginService.logIn(login, password);
-
-  if (result.success) {
-    res.cookie(jwt, result.token, {
-      httpOnly: true,
-      secure: process.env.ENVIROMENT === "DEV" ? false : true,
-      sameSite,
-      maxAge,
-    });
-
-    return res
-      .status(okCode)
-      .json({ logged: true, username: result.user.username });
-  }
-
-  // Internal server error
-  if (result.code === internalServerErrorCode) {
-    return res.status(result.code).json({
-      logged: false,
-      message: unexpectedError,
-    });
-  }
-
-  // Unauthorized log in
-  return res.status(result.code).json({
-    logged: false,
-    message: unauthorizedMessage,
-  });
-});
-
 userRoutes.post("/logout", (_, res) => {
   res.clearCookie("jwt");
   res.json({ loggedOut: true, message: logoutMessage });
@@ -138,7 +121,7 @@ userRoutes.post(
     const result = await LoginService.updatePassword(
       login,
       oldPassword,
-      newPassword,
+      newPassword
     );
 
     if (result.passwordUpdated) {
@@ -152,8 +135,8 @@ userRoutes.post(
     if (result.code === notFoundCode) {
       return res.status(result.code).json({
         passwordChanged: false,
-        message: userNotFound
-      })
+        message: userNotFound,
+      });
     }
 
     // Internal server error
@@ -163,8 +146,7 @@ userRoutes.post(
         message: unexpectedError,
       });
     }
-
-  },
+  }
 );
 
 userRoutes.delete(
@@ -176,9 +158,9 @@ userRoutes.delete(
     const result = await LoginService.deleteUser(userId);
 
     // In case of success
-    if (result.code = noContentCode) {
+    if ((result.code = noContentCode)) {
       return res.status(result.code).json({
-        deleted: true
+        deleted: true,
       });
     }
 
@@ -189,8 +171,7 @@ userRoutes.delete(
         message: unexpectedError,
       });
     }
-
-  },
+  }
 );
 
 export default userRoutes;

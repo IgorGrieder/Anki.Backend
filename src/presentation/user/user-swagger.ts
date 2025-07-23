@@ -4,22 +4,52 @@ import { commonResponses } from "../../infra/swagger/components";
 const createUserSchema: OpenAPIV3.SchemaObject = {
   type: "object",
   properties: {
-    name: { type: "string", example: "Jane Doe" },
-    email: { type: "string", format: "email", example: "jane.doe@example.com" },
+    username: {
+      type: "string",
+      minLength: 3,
+      maxLength: 30,
+      example: "jane_doe",
+      description: "Optional. Must be unique if provided.",
+    },
+    email: {
+      type: "string",
+      format: "email",
+      example: "jane.doe@example.com",
+    },
     password: {
       type: "string",
       format: "password",
-      description: "Minimum 8 characters",
-      example: "StrongPassword123",
+      minLength: 6,
+      example: "Str0ngP@ssw0rd!",
+    },
+    first_name: {
+      type: "string",
+      maxLength: 50,
+      example: "Jane",
+    },
+    last_name: {
+      type: "string",
+      maxLength: 50,
+      example: "Doe",
+    },
+    city: {
+      type: "string",
+      maxLength: 100,
+      example: "San Francisco",
+    },
+    country: {
+      type: "string",
+      maxLength: 100,
+      example: "USA",
     },
   },
-  required: ["name", "email", "password"],
+  required: ["email", "password"],
 };
 
 const path = "/api/auth";
 
-export const accountPaths: OpenAPIV3.PathsObject = {
-  [`${path}/create-account`]: {
+export const userPaths: OpenAPIV3.PathsObject = {
+  [`${path}/create-user`]: {
     post: {
       tags: ["Authentication"],
       summary: "Create a new user account",
