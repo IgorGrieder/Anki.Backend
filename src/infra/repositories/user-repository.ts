@@ -20,11 +20,16 @@ export const findAccountById = async (
   id: string
 ): Promise<UserDocument | null> => {
   const data = await UserModel.findById(id).lean();
+
+  if (!data) {
+    return null;
+  }
+
   const result = userDocumentSchema.safeParse(data);
 
-  if (data && !result.success) {
+  if (!result.success) {
     throw new ZodDBValidationError<UserDocument>(result);
   }
 
-  return data;
+  return result.data;
 };
