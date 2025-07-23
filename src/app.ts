@@ -1,10 +1,12 @@
 import express, { Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { mongoConnection } from "./infra/db/mongo/mongo";
-import { routeMux } from "./presentation";
-import { httpMiddleware } from "./presentation/middleware/http-middleware";
+import { mongoConnection } from "./shared/infra/persistance/mongo/mongo";
+import { httpMiddleware } from "./shared/middlewares/http-middleware";
 import dotenv from "dotenv";
+import * as swaggerUi from "swagger-ui-express";
+import { openApiDocument } from "./shared/infra/swagger/swagger";
+import { userRouter } from "./features/users/presentation";
 
 dotenv.config();
 export const PORT = process.env.PORT;
@@ -27,5 +29,9 @@ export const setupStart = async (app: Application) => {
   app.use(cookieParser());
   app.use(httpMiddleware);
 
-  routeMux(app);
+  // RoutesMux
+  /*  app.use("/api/cards", cardRoutes); */
+  /* app.use("/api/collections", collectionRoutes) */
+  app.use(userRouter);
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 };

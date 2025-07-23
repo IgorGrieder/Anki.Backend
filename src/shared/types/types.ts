@@ -8,3 +8,12 @@ export enum LogLevel {
   DEBUG = "DEBUG",
   HTTP = "HTTP",
 }
+
+export interface GenericError {
+  code: number;
+  msg: string;
+}
+
+export interface GenericSuccess {
+  code: number;
+}
