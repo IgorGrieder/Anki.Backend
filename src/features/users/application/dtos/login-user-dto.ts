@@ -9,7 +9,7 @@ export const loginUserSchema = z.object({
       error: "Username must be at least 3 characters long",
     }),
   ]),
-  passowrd: z.string().min(6, {
+  password: z.string().min(6, {
     error: "Password must be at least 6 characters long",
   }),
 });

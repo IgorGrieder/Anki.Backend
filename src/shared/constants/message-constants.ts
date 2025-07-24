@@ -19,3 +19,4 @@ export const logoutMessage = "Logged out successfully";
 export const invalidArguments = "Email/username and password are required";
 export const usernameAlreadyUsed = "Username already exists, try another one";
 export const emailAlreadyUsed = "Email already exists, try another one";
+export const invalidPassword = "Invalid password";

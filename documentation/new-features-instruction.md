@@ -141,3 +141,4 @@ src/features/cards/
 - [ ] Implemented route handlers and registered routes in presentation.
 - [ ] Added Swagger docs.
 - [ ] Registered the feature’s router in the main app.
+- [ ] Don't leave strings in the code, use constants

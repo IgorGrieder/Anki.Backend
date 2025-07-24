@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { IUser } from "./user-types";
+import { UserDocument } from "../../domain/user-types";
 
-const userSchema = new mongoose.Schema<IUser>(
+const userSchema = new mongoose.Schema<UserDocument>(
   {
     username: {
       type: String,
@@ -104,4 +104,4 @@ userSchema.index({ email: 1 });
 userSchema.index({ username: 1 });
 userSchema.index({ google_id: 1 });
 
-export const UserModel = mongoose.model<IUser>("User", userSchema);
+export const UserModel = mongoose.model<UserDocument>("User", userSchema);
