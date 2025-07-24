@@ -4,17 +4,16 @@ import { errorLogger } from "../../../shared/logger/error-logger";
 import { generateJWT, hashPassword } from "../../../shared/auth/auth-module";
 import { validateWithSchema } from "../../../shared/utils/generic-schema-validator";
 import {
-  badRequest,
-  created,
-  internalServerErrorCode,
-} from "../../../shared/constants/http-code-constants";
-import { unexpectedError } from "../../../shared/constants/message-constants";
+  httpCodeConstants,
+  messageConstants,
+} from "../../../shared/constants/constants-module";
 import {
   GenericError,
   GenericSuccess,
   Result,
 } from "../../../shared/types/types";
 import { UserModel } from "../infra/persistance/user-model";
+import { isDuplicateKeyError } from "../../../shared/utils/helpers";
 
 interface Success extends GenericSuccess {
   token: string;
@@ -32,20 +31,29 @@ export const createNewAccount = async (
     );
     const token = generateJWT(data);
 
-    return { kind: "success", value: { code: created, token } };
+    return {
+      kind: "success",
+      value: { code: httpCodeConstants.created, token },
+    };
   } catch (err: any) {
     errorLogger("Error trying to create a new user", err);
 
     if (isDuplicateKeyError(err)) {
       return {
         kind: "error",
-        error: { code: badRequest, msg: "Email/username already in use" },
+        error: {
+          code: httpCodeConstants.badRequest,
+          msg: "Email/username already in use",
+        },
       };
     }
 
     return {
       kind: "error",
-      error: { code: internalServerErrorCode, msg: unexpectedError },
+      error: {
+        code: httpCodeConstants.internalServerError,
+        msg: messageConstants.unexpectedError,
+      },
     };
   }
 };
