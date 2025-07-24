@@ -1,9 +1,9 @@
 import { UserModel } from "../infra/persistance/user-model";
 import { LoginUserDto } from "./dtos/login-user-dto";
 import { UserDocument, userDocumentSchema } from "../domain/user-types";
-import { validateWithSchema } from "../../../shared/infra/persistance/validators/generic-schema-validator";
-import { generateJWT } from "../../../shared/infra/auth/generate-jwt";
-import { errorLogger } from "../../../shared/infra/logger/error-logger";
+import { validateWithSchema } from "../../../shared/utils/generic-schema-validator";
+import { generateJWT } from "../../../shared/auth/generate-jwt";
+import { errorLogger } from "../../../shared/logger/error-logger";
 import {
   unauthorizedCode,
   notFoundCode,

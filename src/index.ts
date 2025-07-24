@@ -1,5 +1,5 @@
-import { infoLogger } from "./shared/infra/logger/info-logger.js";
-import { errorLogger } from "./shared/infra/logger/error-logger.js";
+import { infoLogger } from "./shared/logger/info-logger.js";
+import { errorLogger } from "./shared/logger/error-logger.js";
 import { app, setupStart, PORT } from "./app.js";
 
 const startServer = async () => {

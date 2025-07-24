@@ -1,4 +1,4 @@
-export default {
+export const resMessages = {
   incompleteReqInfo: "Information submited is not fully complete",
   unexpectedError: "An unexpected error occurred",
   deletedCollection: "Your collection was deleted successfully",

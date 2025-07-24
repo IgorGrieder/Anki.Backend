@@ -1,11 +1,11 @@
 import express, { Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { mongoConnection } from "./shared/infra/persistance/mongo/mongo";
+import { mongoConnection } from "../config/db/mongo";
 import { httpMiddleware } from "./shared/middlewares/http-middleware";
 import dotenv from "dotenv";
 import * as swaggerUi from "swagger-ui-express";
-import { openApiDocument } from "./shared/infra/swagger/swagger";
+import { openApiDocument } from "../config/swagger/swagger";
 import { userRouter } from "./features/users/presentation";
 
 dotenv.config();

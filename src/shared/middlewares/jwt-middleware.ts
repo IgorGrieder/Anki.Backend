@@ -3,7 +3,7 @@ import {
   httpCodeConstants,
   messageConstants,
 } from "../../shared/constants/constants-module";
-import { errorLogger } from "../logger/error-logger";
+import logger from "../logger/logger-module";
 import { validateJWT } from "../auth/validate-jwt";
 
 export const validateJWTMiddlewear = async (
@@ -31,7 +31,7 @@ export const validateJWTMiddlewear = async (
     req.body.jwt = result.value.decoded;
     next();
   } catch (err: any) {
-    errorLogger("Error trying to validate JWT Token", err);
+    logger.errorLogger("Error trying to validate JWT Token", err);
     res
       .status(httpCodeConstants.unauthorized)
       .json({ message: messageConstants.invalidToken });

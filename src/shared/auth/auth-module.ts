@@ -3,4 +3,4 @@ import { hashPassword } from "./hash-password";
 import { validateJWT } from "./validate-jwt";
 
 // General module wrapper
-export { generateJWT, hashPassword, validateJWT };
+export default { generateJWT, hashPassword, validateJWT };

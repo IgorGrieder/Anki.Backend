@@ -1,5 +1,5 @@
 import { OpenAPIV3 } from "openapi-types";
-import { commonResponses } from "../../../shared/infra/swagger/components";
+import { commonResponses } from "../../../../config/swagger/components";
 
 const createUserSchema: OpenAPIV3.SchemaObject = {
   type: "object",

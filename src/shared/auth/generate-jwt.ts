@@ -1,6 +1,6 @@
 import jsonwebtoken from "jsonwebtoken";
-import { expiresIn } from "../constants/jwt-constants";
 import { UserDocument } from "../../features/users/domain/user-types";
+import { jwtConstants } from "../constants/constants-module";
 
 const generateJWT = (user: UserDocument): string => {
   const payload = {
@@ -11,8 +11,9 @@ const generateJWT = (user: UserDocument): string => {
 
   const jwtSecret = process.env.SECRET_KEY_JWT;
   if (!jwtSecret) throw Error("No JWT secret provided");
+
   return jsonwebtoken.sign(payload, jwtSecret, {
-    expiresIn,
+    expiresIn: jwtConstants.expiresIn,
   });
 };
 
