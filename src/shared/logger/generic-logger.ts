@@ -1,8 +1,8 @@
-import { LogLevel } from "../../types/types";
+import { LogLevel } from "../types/types";
 
 type LogData = Record<string, unknown> | Error;
 
-export const createLogger =
+const createLogger =
   (level: LogLevel) =>
   (message: string, data?: LogData): void => {
     console.log(
@@ -23,3 +23,5 @@ export const createLogger =
       )
     );
   };
+
+export { createLogger };
