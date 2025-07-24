@@ -1,15 +1,6 @@
 import jsonwebtoken, { JwtPayload } from "jsonwebtoken";
 import { Result } from "../types/types";
-import {
-  errorToken,
-  expiredToken,
-  unauthorizedMessage,
-  unexpectedError,
-} from "../constants/message-constants";
-import {
-  internalServerErrorCode,
-  unauthorizedCode,
-} from "../constants/http-code-constants";
+import { resMessages, httpCodes } from "../constants/constants-module";
 
 type success = { decoded: JwtPayload };
 type error = { code: number; message: string };
@@ -31,7 +22,10 @@ const validateJWT = async (token: string): Promise<Result<success, error>> => {
     if (!secret) {
       return {
         kind: "error",
-        error: { code: internalServerErrorCode, message: unexpectedError },
+        error: {
+          code: httpCodes.internalServerError,
+          message: resMessages.unexpectedError,
+        },
       };
     }
 
@@ -41,18 +35,27 @@ const validateJWT = async (token: string): Promise<Result<success, error>> => {
     if (err.name === "TokenExpiredError") {
       return {
         kind: "error",
-        error: { code: unauthorizedCode, message: expiredToken },
+        error: {
+          code: httpCodes.unauthorized,
+          message: resMessages.expiredToken,
+        },
       };
     }
     if (err.name === "JsonWebTokenError") {
       return {
         kind: "error",
-        error: { code: unauthorizedCode, message: errorToken },
+        error: {
+          code: httpCodes.unauthorized,
+          message: resMessages.errorToken,
+        },
       };
     }
     return {
       kind: "error",
-      error: { code: internalServerErrorCode, message: unauthorizedMessage },
+      error: {
+        code: httpCodes.internalServerError,
+        message: resMessages.unauthorizedMessage,
+      },
     };
   }
 };
