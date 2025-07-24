@@ -1,8 +1,8 @@
 import jsonwebtoken from "jsonwebtoken";
-import { expiresIn } from "../../constants/jwt-constants";
-import { UserDocument } from "../../../features/users/domain/user-types";
+import { expiresIn } from "../constants/jwt-constants";
+import { UserDocument } from "../../features/users/domain/user-types";
 
-export const generateJWT = (user: UserDocument): string => {
+const generateJWT = (user: UserDocument): string => {
   const payload = {
     userId: user._id,
     username: user.username,
@@ -15,3 +15,5 @@ export const generateJWT = (user: UserDocument): string => {
     expiresIn,
   });
 };
+
+export { generateJWT };

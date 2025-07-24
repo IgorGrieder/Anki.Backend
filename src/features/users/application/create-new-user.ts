@@ -1,10 +1,8 @@
 import { UserDocument, userDocumentSchema } from "../domain/user-types";
 import { CreateUserDto } from "./dtos/create-user-dto";
-import { generateJWT } from "../../../shared/infra/auth/generate-jwt";
-import { hashPassword } from "../../../shared/infra/auth/hash-password";
-import { isDuplicateKeyError } from "../../../shared/infra/persistance/mongo/mongo-errors";
-import { errorLogger } from "../../../shared/infra/logger/error-logger";
-import { validateWithSchema } from "../../../shared/infra/persistance/validators/generic-schema-validator";
+import { errorLogger } from "../../../shared/logger/error-logger";
+import { generateJWT, hashPassword } from "../../../shared/auth/auth-module";
+import { validateWithSchema } from "../../../shared/utils/generic-schema-validator";
 import {
   badRequest,
   created,

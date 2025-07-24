@@ -1,15 +1,15 @@
 import jsonwebtoken, { JwtPayload } from "jsonwebtoken";
-import { Result } from "../../types/types";
+import { Result } from "../types/types";
 import {
   errorToken,
   expiredToken,
   unauthorizedMessage,
   unexpectedError,
-} from "../../constants/message-constants";
+} from "../constants/message-constants";
 import {
   internalServerErrorCode,
   unauthorizedCode,
-} from "../../constants/http-code-constants";
+} from "../constants/http-code-constants";
 
 type success = { decoded: JwtPayload };
 type error = { code: number; message: string };
@@ -25,9 +25,7 @@ const verifyToken = (token: string, secret: string): Promise<JwtPayload> => {
   });
 };
 
-export const validateJWT = async (
-  token: string
-): Promise<Result<success, error>> => {
+const validateJWT = async (token: string): Promise<Result<success, error>> => {
   try {
     const secret = process.env.SECRET_KEY_JWT;
     if (!secret) {
@@ -58,3 +56,5 @@ export const validateJWT = async (
     };
   }
 };
+
+export { validateJWT };

@@ -1,10 +1,8 @@
-import { CreateUserDto } from "../../../features/users/application/dtos/create-user-dto";
-import { saltRounds } from "../../constants/jwt-constants";
+import { CreateUserDto } from "../../features/users/application/dtos/create-user-dto";
+import { saltRounds } from "../constants/jwt-constants";
 import bcrypt from "bcrypt";
 
-export const hashPassword = async (
-  user: CreateUserDto
-): Promise<CreateUserDto> => {
+const hashPassword = async (user: CreateUserDto): Promise<CreateUserDto> => {
   try {
     if (!user.password) {
       throw new Error("Password is not provided, cannot hash.");
@@ -16,3 +14,5 @@ export const hashPassword = async (
     throw error;
   }
 };
+
+export { hashPassword };

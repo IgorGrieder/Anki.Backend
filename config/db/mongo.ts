@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { infoLogger } from "../../logger/info-logger";
-import { errorLogger } from "../../logger/error-logger";
+import { infoLogger } from "../../src/shared/infra/logger/info-logger";
+import { errorLogger } from "../../src/shared/infra/logger/error-logger";
 
 export const mongoConnection = async () => {
   const connectionString: string = process.env.DB_STRING ?? "";
