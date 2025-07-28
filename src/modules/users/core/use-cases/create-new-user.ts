@@ -1,19 +1,19 @@
 import { UserDocument, userDocumentSchema } from "../domain/user-types";
 import { CreateUserDto } from "./dtos/create-user-dto";
 import { errorLogger } from "../../../shared/logger/error-logger";
-import { generateJWT, hashPassword } from "../../../shared/auth/auth-module";
-import { validateWithSchema } from "../../../shared/utils/generic-schema-validator";
+import { generateJWT, hashPassword } from "../../../../shared/auth/auth-module";
+import { validateWithSchema } from "../../../../shared/utils/generic-schema-validator";
 import {
   httpCodeConstants,
   messageConstants,
-} from "../../../shared/constants/constants-module";
+} from "../../../../shared/constants/constants-module";
 import {
   GenericError,
   GenericSuccess,
   Result,
-} from "../../../shared/types/types";
-import { UserModel } from "../infra/persistance/user-model";
-import { isDuplicateKeyError } from "../../../shared/utils/helpers";
+} from "../../../../shared/types/types";
+import { UserModel } from "../../adapter/driven/mongoose/user-model";
+import { isDuplicateKeyError } from "../../../../shared/utils/helpers";
 
 interface Success extends GenericSuccess {
   token: string;

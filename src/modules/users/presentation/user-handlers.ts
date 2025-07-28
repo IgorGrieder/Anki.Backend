@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { CreateUserDto } from "../application/dtos/create-user-dto";
-import { createNewAccount as createNewUser } from "../application/create-new-user";
+import { CreateUserDto } from "../core/use-cases/dtos/create-user-dto";
+import { createNewAccount as createNewUser } from "../core/use-cases/create-new-user";
 import { jwt, maxAge, sameSite } from "../../../shared/constants/jwt-constants";
 import { loginUser } from "../application/login-user";
-import { LoginUserDto } from "../application/dtos/login-user-dto";
+import { LoginUserDto } from "../core/use-cases/dtos/login-user-dto";
 
 export const createUserHandler = async (req: Request, res: Response) => {
   const createuserDto: CreateUserDto = req.body;

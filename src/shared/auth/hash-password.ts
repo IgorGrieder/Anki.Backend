@@ -1,4 +1,4 @@
-import { CreateUserDto } from "../../modules/users/application/dtos/create-user-dto";
+import { CreateUserDto } from "../../modules/users/core/use-cases/dtos/create-user-dto";
 import { jwtConstants } from "../constants/constants-module";
 import bcrypt from "bcrypt";
 

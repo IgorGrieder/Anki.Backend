@@ -27,4 +27,6 @@ export const userDocumentSchema = z.object({
   updated_at: z.date(), // Mongoose timestamps
 });
 
-export type UserDocument = z.infer<typeof userDocumentSchema>;
+type UserTypeHolder = z.infer<typeof userDocumentSchema>;
+
+export type User = Readonly<UserTypeHolder>;

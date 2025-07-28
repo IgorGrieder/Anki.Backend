@@ -1,25 +1,25 @@
-import { UserModel } from "../infra/persistance/user-model";
+import { UserModel } from "../../adapter/driven/mongoose/user-model";
 import { LoginUserDto } from "./dtos/login-user-dto";
 import { UserDocument, userDocumentSchema } from "../domain/user-types";
-import { validateWithSchema } from "../../../shared/utils/generic-schema-validator";
-import { generateJWT } from "../../../shared/auth/generate-jwt";
+import { validateWithSchema } from "../../../../shared/utils/generic-schema-validator";
+import { generateJWT } from "../../../../shared/auth/generate-jwt";
 import { errorLogger } from "../../../shared/logger/error-logger";
 import {
   unauthorizedCode,
   notFoundCode,
   internalServerErrorCode,
   okCode,
-} from "../../../shared/constants/http-code-constants";
+} from "../../../../shared/constants/http-code-constants";
 import {
   unexpectedError,
   userNotFound,
   invalidPassword,
-} from "../../../shared/constants/message-constants";
+} from "../../../../shared/constants/message-constants";
 import {
   Result,
   GenericError,
   GenericSuccess,
-} from "../../../shared/types/types";
+} from "../../../../shared/types/types";
 import bcrypt from "bcryptjs";
 
 interface Success extends GenericSuccess {
