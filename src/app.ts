@@ -1,13 +1,12 @@
 import express, { Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { mongoConnection } from "../src/shared/config/db/mongo";
+import { mongoConnection } from "./shared/config/db/mongo";
 import { httpMiddleware } from "./shared/middlewares/http-middleware";
 import dotenv from "dotenv";
 import * as swaggerUi from "swagger-ui-express";
-import { openApiDocument } from "../src/shared/config/swagger/swagger";
-import { createUserRouter } from "./modules/users/adapter/driving/routes";
-import { UserController } from "./modules/users/core/user-module";
+import { openApiDocument } from "./shared/config/swagger/swagger";
+import { Container } from "./infrastructure/di/container";
 
 dotenv.config();
 export const PORT = process.env.PORT;
@@ -30,9 +29,12 @@ export const setupStart = async (app: Application) => {
   app.use(cookieParser());
   app.use(httpMiddleware);
 
-  // RoutesMux
-  /*  app.use("/api/cards", cardRoutes); */
-  /* app.use("/api/collections", collectionRoutes) */
-  app.use(createUserRouter(UserController));
+  // Initialize dependency injection container
+  const container = Container.getInstance();
+
+  // Setup routes using hexagonal architecture
+  app.use("/api/users", container.getUserRoutes());
+
+  // Swagger documentation
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 };
