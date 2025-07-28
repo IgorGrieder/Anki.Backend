@@ -9,6 +9,3 @@ export const UserUseCases = {
   createUser: createUserUseCase(userRepository),
   loginUser: loginUserUseCase(userRepository),
 };
-
-// Export the repository for testing or other uses
-export const getUserRepository = (): IUserRepository => userRepository;
