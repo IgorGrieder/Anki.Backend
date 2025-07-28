@@ -6,7 +6,8 @@ import { httpMiddleware } from "./shared/middlewares/http-middleware";
 import dotenv from "dotenv";
 import * as swaggerUi from "swagger-ui-express";
 import { openApiDocument } from "../src/shared/config/swagger/swagger";
-import { userRouter } from "./modules/users/adapter/driving/routes";
+import { createUserRouter } from "./modules/users/adapter/driving/routes";
+import { UserController } from "./modules/users/core/user-module";
 
 dotenv.config();
 export const PORT = process.env.PORT;
@@ -32,6 +33,6 @@ export const setupStart = async (app: Application) => {
   // RoutesMux
   /*  app.use("/api/cards", cardRoutes); */
   /* app.use("/api/collections", collectionRoutes) */
-  app.use(userRouter);
+  app.use(createUserRouter(UserController));
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 };

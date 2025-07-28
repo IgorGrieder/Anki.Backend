@@ -60,7 +60,7 @@ src/modules/{module-name}/
 │   ├── driven/
 │   │   └── {module}-repository.ts      # Repository interface
 │   └── driving/
-│       └── {module}-service.ts         # External service interface
+│       └── {module}-controller.ts      # Controller interface
 ├── adapter/
 │   ├── driven/
 │   │   ├── {module}-repository.ts      # Repository implementation
@@ -109,6 +109,8 @@ export type CreateEntityDto = z.infer<typeof createEntitySchema>;
 
 ### Step 3: Define Ports (Interfaces)
 
+#### Driven Port (Repository Interface)
+
 ```typescript
 // src/modules/{module}/port/driven/{module}-repository.ts
 import { CreateEntityDto } from "../../core/use-cases/dtos/create-{entity}-dto";
@@ -120,6 +122,27 @@ export interface IEntityRepository {
   findByEmail(email: string): Promise<Entity | null>;
   updateEntity(id: string, updates: Partial<Entity>): Promise<Entity | null>;
   deleteEntity(id: string): Promise<boolean>;
+}
+```
+
+#### Driving Port (Controller Interface)
+
+```typescript
+// src/modules/{module}/port/driving/{module}-controller.ts
+import { CreateEntityDto } from "../../core/use-cases/dtos/create-{entity}-dto";
+import {
+  Result,
+  GenericError,
+  GenericSuccess,
+} from "../../../../shared/types/types";
+
+interface Success extends GenericSuccess {
+  entity: Entity;
+}
+
+export interface IEntityController {
+  createEntity(entity: CreateEntityDto): Promise<Result<Success, GenericError>>;
+  findById(id: string): Promise<Result<Success, GenericError>>;
 }
 ```
 
@@ -248,21 +271,63 @@ export const createEntityRepository = (): IEntityRepository => {
 };
 ```
 
-### Step 6: Create Module Factory
+### Step 6: Create Controller Implementation
+
+```typescript
+// src/modules/{module}/core/{module}-controller.ts
+import { IEntityController } from "../port/driving/{module}-controller";
+import { CreateEntityDto } from "./use-cases/dtos/create-{entity}-dto";
+import {
+  Result,
+  GenericError,
+  GenericSuccess,
+} from "../../../shared/types/types";
+
+interface Success extends GenericSuccess {
+  entity: Entity;
+}
+
+type CreateEntityUseCase = (
+  entity: CreateEntityDto
+) => Promise<Result<Success, GenericError>>;
+
+export const createEntityController = (
+  createEntityUseCase: CreateEntityUseCase
+): IEntityController => {
+  return {
+    async createEntity(
+      entity: CreateEntityDto
+    ): Promise<Result<Success, GenericError>> {
+      return createEntityUseCase(entity);
+    },
+  };
+};
+```
+
+### Step 7: Create Module Factory
 
 ```typescript
 // src/modules/{module}/core/{module}-module.ts
 import { createEntityUseCase } from "./use-cases/create-{entity}";
-import { updateEntityUseCase } from "./use-cases/update-{entity}";
 import { createEntityRepository } from "../adapter/driven/{module}-repository";
+import { createEntityController } from "./{module}-controller";
 import { IEntityRepository } from "../port/driven/{module}-repository";
+import { IEntityController } from "../port/driving/{module}-controller";
 
 const entityRepository: IEntityRepository = createEntityRepository();
 
+// Create use cases with dependencies
+const createEntity = createEntityUseCase(entityRepository);
+
+// Create controller with use cases injected
+const entityController: IEntityController =
+  createEntityController(createEntity);
+
 export const EntityUseCases = {
-  createEntity: createEntityUseCase(entityRepository),
-  updateEntity: updateEntityUseCase(entityRepository),
+  createEntity,
 };
+
+export const EntityController = entityController;
 
 // Export the repository for testing or other uses
 export const getEntityRepository = (): IEntityRepository => entityRepository;
@@ -286,24 +351,26 @@ export { EntityUseCases } from "../{module}-module";
 // src/modules/{module}/adapter/driving/http-handlers.ts
 import { Request, Response } from "express";
 import { CreateEntityDto } from "../../core/use-cases/dtos/create-{entity}-dto";
-import { EntityUseCases } from "../../core/{module}-module";
+import { IEntityController } from "../../port/driving/{module}-controller";
 
-export const createEntityHandler = async (req: Request, res: Response) => {
-  const createEntityDto: CreateEntityDto = req.body;
-  const result = await EntityUseCases.createEntity(createEntityDto);
+export const createEntityHandler =
+  (entityController: IEntityController) =>
+  async (req: Request, res: Response) => {
+    const createEntityDto: CreateEntityDto = req.body;
+    const result = await entityController.createEntity(createEntityDto);
 
-  if (result.kind === "success") {
-    res.status(result.value.code).json({
-      message: "Entity created successfully",
-      entity: result.value.entity,
+    if (result.kind === "success") {
+      res.status(result.value.code).json({
+        message: "Entity created successfully",
+        entity: result.value.entity,
+      });
+      return;
+    }
+
+    res.status(result.error.code).json({
+      message: result.error.msg,
     });
-    return;
-  }
-
-  res.status(result.error.code).json({
-    message: result.error.msg,
-  });
-};
+  };
 ```
 
 ### Step 9: Set Up Routes
@@ -311,18 +378,23 @@ export const createEntityHandler = async (req: Request, res: Response) => {
 ```typescript
 // src/modules/{module}/adapter/driving/routes.ts
 import { Router } from "express";
-import * as EntityHandlers from "./http-handlers";
+import { createEntityHandler } from "./http-handlers";
 import { createEntitySchema } from "../../core/use-cases/dtos/create-{entity}-dto";
 import { genericValidator } from "../../../../shared/middlewares/generic-validator";
+import { IEntityController } from "../../port/driving/{module}-controller";
 
-export const entityRouter = Router();
-export const path = "/api/{entity}";
+export const createEntityRouter = (entityController: IEntityController) => {
+  const entityRouter = Router();
+  const path = "/api/{entity}";
 
-entityRouter.post(
-  `${path}/create`,
-  genericValidator(createEntitySchema),
-  EntityHandlers.createEntityHandler
-);
+  entityRouter.post(
+    `${path}/create`,
+    genericValidator(createEntitySchema),
+    createEntityHandler(entityController)
+  );
+
+  return entityRouter;
+};
 ```
 
 ## 🔧 Key Principles

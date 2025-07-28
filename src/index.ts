@@ -1,5 +1,4 @@
-import { infoLogger } from "./shared/logger/info-logger.js";
-import { errorLogger } from "./shared/logger/error-logger.js";
+import logger from "../src/shared/logger/logger-module";
 import { app, setupStart, PORT } from "./app.js";
 
 const startServer = async () => {
@@ -7,10 +6,10 @@ const startServer = async () => {
     await setupStart(app);
 
     app.listen(PORT, () => {
-      infoLogger(`Server running. Port: ${PORT}`);
+      logger.infoLogger(`Server running. Port: ${PORT}`);
     });
   } catch (err: any) {
-    errorLogger("An error occured while starting the server", err);
+    logger.errorLogger("An error occured while starting the server", err);
     process.exit(1);
   }
 };
