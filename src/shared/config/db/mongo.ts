@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import logger from "../../src/shared/logger/logger-module";
+import logger from "../../logger/logger-module";
 
 export const mongoConnection = async () => {
   const connectionString: string = process.env.DB_STRING ?? "";
