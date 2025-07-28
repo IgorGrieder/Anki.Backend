@@ -1,5 +1,5 @@
 import jsonwebtoken from "jsonwebtoken";
-import { UserDocument } from "../../features/users/domain/user-types";
+import { UserDocument } from "../../modules/users/domain/user-types";
 import { jwtConstants } from "../constants/constants-module";
 
 const generateJWT = (user: UserDocument): string => {

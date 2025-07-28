@@ -1,5 +1,5 @@
 import { OpenAPIV3 } from "openapi-types";
-import { userPaths } from "../../src/features/users/presentation/user-swagger";
+import { userPaths } from "../../src/modules/users/presentation/user-swagger";
 import { ErrorSchema } from "./components";
 
 export const openApiDocument: OpenAPIV3.Document = {
