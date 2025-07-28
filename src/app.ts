@@ -6,7 +6,7 @@ import { httpMiddleware } from "./shared/middlewares/http-middleware";
 import dotenv from "dotenv";
 import * as swaggerUi from "swagger-ui-express";
 import { openApiDocument } from "../config/swagger/swagger";
-import { userRouter } from "./modules/users/presentation";
+import { userRouter } from "./modules/users/adapter/driving/routes";
 
 dotenv.config();
 export const PORT = process.env.PORT;

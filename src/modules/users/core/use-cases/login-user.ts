@@ -1,75 +1,79 @@
-import { UserModel } from "../../adapter/driven/mongoose/user-model";
+import { IUserRepository } from "../../port/driven/user-repository";
 import { LoginUserDto } from "./dtos/login-user-dto";
-import { UserDocument, userDocumentSchema } from "../domain/user-types";
-import { validateWithSchema } from "../../../../shared/utils/generic-schema-validator";
-import { generateJWT } from "../../../../shared/auth/generate-jwt";
-import { errorLogger } from "../../../shared/logger/error-logger";
-import {
-  unauthorizedCode,
-  notFoundCode,
-  internalServerErrorCode,
-  okCode,
-} from "../../../../shared/constants/http-code-constants";
-import {
-  unexpectedError,
-  userNotFound,
-  invalidPassword,
-} from "../../../../shared/constants/message-constants";
 import {
   Result,
   GenericError,
   GenericSuccess,
 } from "../../../../shared/types/types";
+import { generateJWT } from "../../../../shared/auth/generate-jwt";
+import { validateWithSchema } from "../../../../shared/utils/generic-schema-validator";
+import { userDocumentSchema, User } from "../user-entity";
+import logger from "../../../../shared/logger/logger-module";
+import {
+  httpCodes,
+  resMessages,
+} from "../../../../shared/constants/constants-module";
 import bcrypt from "bcryptjs";
 
 interface Success extends GenericSuccess {
   token: string;
 }
 
-export const loginUser = async (
-  user: LoginUserDto
-): Promise<Result<Success, GenericError>> => {
-  try {
-    const result = await UserModel.findOne({
-      $or: [{ username: user.login }, { email: user.login }],
-    }).lean();
+export const loginUserUseCase =
+  (userRepository: IUserRepository) =>
+  async (user: LoginUserDto): Promise<Result<Success, GenericError>> => {
+    try {
+      const result = await userRepository.findByEmailOrUsername(user.login);
 
-    const data = validateWithSchema<UserDocument>(userDocumentSchema, result);
+      if (!result) {
+        return {
+          kind: "error",
+          error: { code: httpCodes.notFound, msg: resMessages.userNotFound },
+        };
+      }
 
-    if (!result) {
+      if (!result.password_hash) {
+        return {
+          kind: "error",
+          error: {
+            code: httpCodes.unauthorized,
+            msg: resMessages.invalidPassword,
+          },
+        };
+      }
+
+      const isPasswordValid = await bcrypt.compare(
+        user.password,
+        result.password_hash
+      );
+      if (!isPasswordValid) {
+        return {
+          kind: "error",
+          error: {
+            code: httpCodes.unauthorized,
+            msg: resMessages.invalidPassword,
+          },
+        };
+      }
+
+      // Update last login
+      await userRepository.updateLastLogin(result._id);
+
+      const data = validateWithSchema<User>(userDocumentSchema, result);
+      const token = generateJWT(data);
+
+      return {
+        kind: "success",
+        value: { code: httpCodes.ok, token },
+      };
+    } catch (err: any) {
+      logger.errorLogger("Error during user login", err);
       return {
         kind: "error",
-        error: { code: notFoundCode, msg: userNotFound },
+        error: {
+          code: httpCodes.internalServerError,
+          msg: resMessages.unexpectedError,
+        },
       };
     }
-
-    if (!result.password_hash) {
-      return {
-        kind: "error",
-        error: { code: unauthorizedCode, msg: invalidPassword },
-      };
-    }
-    const isPasswordValid = await bcrypt.compare(
-      user.password,
-      result.password_hash
-    );
-    if (!isPasswordValid) {
-      return {
-        kind: "error",
-        error: { code: unauthorizedCode, msg: invalidPassword },
-      };
-    }
-
-    const token = generateJWT(data);
-    return {
-      kind: "success",
-      value: { code: okCode, token },
-    };
-  } catch (err: any) {
-    errorLogger("Error during user login", err);
-    return {
-      kind: "error",
-      error: { code: internalServerErrorCode, msg: unexpectedError },
-    };
-  }
-};
+  };

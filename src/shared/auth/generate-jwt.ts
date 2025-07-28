@@ -1,8 +1,8 @@
 import jsonwebtoken from "jsonwebtoken";
-import { UserDocument } from "../../modules/users/domain/user-types";
+import { User } from "../../modules/users/core/user-entity";
 import { jwtConstants } from "../constants/constants-module";
 
-const generateJWT = (user: UserDocument): string => {
+const generateJWT = (user: User): string => {
   const payload = {
     userId: user._id,
     username: user.username,
@@ -13,7 +13,7 @@ const generateJWT = (user: UserDocument): string => {
   if (!jwtSecret) throw Error("No JWT secret provided");
 
   return jsonwebtoken.sign(payload, jwtSecret, {
-    expiresIn: jwtConstants.expiresIn,
+    expiresIn: jwtConstants.expiresIn as string,
   });
 };
 

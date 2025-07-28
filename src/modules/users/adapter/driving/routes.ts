@@ -1,8 +1,8 @@
 import { Router } from "express";
-import * as UserHandlers from "./user-handlers";
-import { createUserSchema } from "../core/use-cases/dtos/create-user-dto";
-import { loginUserSchema } from "../core/use-cases/dtos/login-user-dto";
-import { genericValidator } from "../../../shared/middlewares/generic-validator";
+import * as UserHandlers from "./http-handlers";
+import { createUserSchema } from "../../core/use-cases/dtos/create-user-dto";
+import { loginUserSchema } from "../../core/use-cases/dtos/login-user-dto";
+import { genericValidator } from "../../../../shared/middlewares/generic-validator";
 
 export const userRouter = Router();
 export const path = "/api/user";

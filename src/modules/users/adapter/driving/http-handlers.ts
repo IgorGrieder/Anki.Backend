@@ -1,20 +1,19 @@
 import { Request, Response } from "express";
-import { CreateUserDto } from "../core/use-cases/dtos/create-user-dto";
-import { createNewAccount as createNewUser } from "../core/use-cases/create-new-user";
-import { jwt, maxAge, sameSite } from "../../../shared/constants/jwt-constants";
-import { loginUser } from "../application/login-user";
-import { LoginUserDto } from "../core/use-cases/dtos/login-user-dto";
+import { CreateUserDto } from "../../core/use-cases/dtos/create-user-dto";
+import { LoginUserDto } from "../../core/use-cases/dtos/login-user-dto";
+import { jwtConstants } from "../../../../shared/constants/jwt-constants";
+import { UserUseCases } from "../../core/user-module";
 
 export const createUserHandler = async (req: Request, res: Response) => {
   const createuserDto: CreateUserDto = req.body;
-  const result = await createNewUser(createuserDto);
+  const result = await UserUseCases.createUser(createuserDto);
 
   if (result.kind === "success") {
-    res.cookie(jwt, result.value.token, {
+    res.cookie(jwtConstants.cookieName, result.value.token, {
       httpOnly: true,
       secure: process.env.ENVIROMENT === "DEV" ? false : true,
-      sameSite,
-      maxAge,
+      sameSite: jwtConstants.sameSite as "strict",
+      maxAge: jwtConstants.maxAge,
     });
 
     res.status(result.value.code);
@@ -28,14 +27,14 @@ export const createUserHandler = async (req: Request, res: Response) => {
 
 export const loginUserHandler = async (req: Request, res: Response) => {
   const loginUserDto: LoginUserDto = req.body;
-  const result = await loginUser(loginUserDto);
+  const result = await UserUseCases.loginUser(loginUserDto);
 
   if (result.kind === "success") {
-    res.cookie(jwt, result.value.token, {
+    res.cookie(jwtConstants.cookieName, result.value.token, {
       httpOnly: true,
       secure: process.env.ENVIROMENT === "DEV" ? false : true,
-      sameSite,
-      maxAge,
+      sameSite: jwtConstants.sameSite as "strict",
+      maxAge: jwtConstants.maxAge,
     });
     res.status(result.value.code).json({ logged: true });
     return;
