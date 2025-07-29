@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import logger from "../../logger/logger-module";
+import { config } from "../env/env-config";
 
 export const mongoConnection = async () => {
-  const connectionString: string = process.env.DB_STRING ?? "";
   try {
-    await mongoose.connect(connectionString);
+    await mongoose.connect(config.MONGO_STRING);
     logger.infoLogger("MongoDB coonection stablished");
   } catch (err) {
     if (err instanceof Error) {
