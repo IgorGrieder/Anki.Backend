@@ -1,8 +1,10 @@
-import { CreateUserDto } from "../../modules/user/core/use-cases/dtos/create-user-dto";
+import { CreateUserInput } from "../../modules/user/presentation/user-inputs";
 import { jwtConstants } from "../constants/constants-module";
 import bcrypt from "bcrypt";
 
-const hashPassword = async (user: CreateUserDto): Promise<CreateUserDto> => {
+const hashPassword = async (
+  user: CreateUserInput
+): Promise<CreateUserInput> => {
   try {
     if (!user.password) {
       throw new Error("Password is not provided, cannot hash.");
