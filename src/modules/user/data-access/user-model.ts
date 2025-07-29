@@ -98,10 +98,4 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// --- Schema Indexes for Performance ---
-// Create indexes on fields that are frequently queried to improve performance.
-userSchema.index({ email: 1 });
-userSchema.index({ username: 1 });
-userSchema.index({ google_id: 1 });
-
 export const UserModel = mongoose.model<UserDocument>("User", userSchema);
