@@ -11,8 +11,6 @@ import { openapiSpecification } from "./shared/config/swagger/swagger";
 dotenv.config();
 export const PORT = process.env.PORT;
 
-export const app: Application = express();
-
 export const setupStart = async (app: Application) => {
   await mongoConnection();
 

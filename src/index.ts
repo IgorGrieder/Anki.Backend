@@ -1,8 +1,10 @@
+import express, { Application } from "express";
 import logger from "../src/shared/logger/logger-module";
-import { app, setupStart, PORT } from "./app.js";
+import { setupStart, PORT } from "./app.js";
 
 const startServer = async () => {
   try {
+    const app: Application = express();
     await setupStart(app);
 
     app.listen(PORT, () => {

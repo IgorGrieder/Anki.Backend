@@ -6,6 +6,7 @@ export const genericBodyValidator = <T extends z.ZodRawShape>(
   schema: z.ZodObject<T>
 ) => {
   return (req: Request, res: Response, next: NextFunction) => {
+    console.log("chegou aquii");
     const result = schema.safeParse(req.body);
 
     if (!result.success) {
