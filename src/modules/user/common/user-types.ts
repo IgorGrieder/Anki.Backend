@@ -31,6 +31,6 @@ export const userDocumentSchema = z.object({
 export type UserDocument = z.infer<typeof userDocumentSchema>;
 export type User = Readonly<UserDocument>;
 
-// Inputs
+// Inputs -----------------------------------------------------
 export type LoginUserInput = z.infer<typeof loginUserSchema>;
 export type CreateUserInput = z.infer<typeof createUserSchema>;
