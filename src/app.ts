@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import { mongoConnection } from "./shared/config/db/mongo";
 import { httpMiddleware } from "./shared/middlewares/http-middleware";
 import dotenv from "dotenv";
-import { createUserRouter } from "./modules/user/presentation";
+import { createUserRouter } from "./modules/user/presentation/routes";
 import swaggerUi from "swagger-ui-express";
 import { openapiSpecification } from "./shared/config/swagger/swagger";
 

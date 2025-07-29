@@ -6,7 +6,7 @@ const options = {
     title: "Anki Cards API",
     version: "1.0.0",
   },
-  apis: ["./src/routes*.js"],
+  apis: ["**/routes.ts"],
 };
 
 export const openapiSpecification = swaggerJsdoc(options);
