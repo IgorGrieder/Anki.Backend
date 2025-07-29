@@ -11,10 +11,7 @@ import {
   resMessages,
 } from "../../../shared/constants/constants-module";
 import bcrypt from "bcryptjs";
-import {
-  findUserByLogin,
-  updateLastLogin,
-} from "../data-access/user-repository";
+import * as UserRepository from "../data-access/user-repository";
 
 interface Success extends GenericSuccess {
   token: string;
@@ -24,7 +21,7 @@ export const loginUser = async (
   user: LoginUserInput
 ): Promise<Result<Success, GenericError>> => {
   try {
-    const userFound = await findUserByLogin(user);
+    const userFound = await UserRepository.findUserByLogin(user);
 
     if (!userFound) {
       return {
@@ -58,7 +55,7 @@ export const loginUser = async (
     }
 
     // Updating the user last login
-    await updateLastLogin(userFound);
+    await UserRepository.updateLastLogin(userFound);
 
     // Generate JWT token
     const token = generateJWT(userFound);

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { createUserSchema, loginUserSchema } from "./user-inputs";
 import { genericBodyValidator } from "../../../shared/middlewares/generic-validator";
-import { createUserHandler, loginUserHandler } from "./user-handlers";
+import * as UserHandlers from "./user-handlers";
 
 export const createUserRouter = () => {
   const userRouter = Router();
@@ -10,13 +10,13 @@ export const createUserRouter = () => {
   userRouter.post(
     `${path}/create-user`,
     genericBodyValidator(createUserSchema),
-    createUserHandler
+    UserHandlers.createUserHandler
   );
 
   userRouter.post(
     `${path}/login`,
     genericBodyValidator(loginUserSchema),
-    loginUserHandler
+    UserHandlers.loginUserHandler
   );
 
   return userRouter;

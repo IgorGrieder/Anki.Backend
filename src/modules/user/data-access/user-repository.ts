@@ -10,7 +10,7 @@ export const updateLastLogin = async (user: UserDocument) => {
 
 export const createNewUser = async (
   user: CreateUserInput
-): Promise<UserDocument | null> => {
+): Promise<UserDocument> => {
   return await UserModel.create(user);
 };
 
