@@ -1,5 +1,7 @@
 import { z } from "zod";
+import { createUserSchema, loginUserSchema } from "../presentation/user-inputs";
 
+// Documents types
 export const userDocumentSchema = z.object({
   _id: z.any().transform((val) => val.toString()),
   username: z.string().min(3).max(30).optional(),
@@ -28,3 +30,7 @@ export const userDocumentSchema = z.object({
 
 export type UserDocument = z.infer<typeof userDocumentSchema>;
 export type User = Readonly<UserDocument>;
+
+// Inputs
+export type LoginUserInput = z.infer<typeof loginUserSchema>;
+export type CreateUserInput = z.infer<typeof createUserSchema>;

@@ -11,8 +11,8 @@ import {
   resMessages,
 } from "../../../shared/constants/constants-module";
 import { isDuplicateKeyError } from "../../../shared/utils/helpers";
-import { CreateUserInput } from "../presentation/user-inputs";
 import { createNewUser } from "../data-access/user-repository";
+import { CreateUserInput } from "../common/user-types";
 
 interface Success extends GenericSuccess {
   token: string;

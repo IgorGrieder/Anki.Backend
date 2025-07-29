@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { jwtConstants } from "../../../shared/constants/constants-module";
-import { CreateUserInput, LoginUserInput } from "./user-inputs";
 import { createUser } from "../app/create-user";
 import { loginUser } from "../app/login-user";
+import { CreateUserInput, LoginUserInput } from "../common/user-types";
 
 export const createUserHandler = async (req: Request, res: Response) => {
   const createUserInput: CreateUserInput = req.body.validated;

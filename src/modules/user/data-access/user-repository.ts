@@ -1,5 +1,8 @@
-import { CreateUserInput, LoginUserInput } from "../presentation/user-inputs";
-import { UserDocument } from "../common/user-types";
+import {
+  CreateUserInput,
+  LoginUserInput,
+  UserDocument,
+} from "../common/user-types";
 import { UserModel } from "./user-model";
 
 export const updateLastLogin = async (user: UserDocument) => {

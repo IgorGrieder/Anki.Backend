@@ -3,7 +3,6 @@ import {
   GenericError,
   GenericSuccess,
 } from "../../../shared/types/types";
-import { LoginUserInput } from "../presentation/user-inputs";
 import { generateJWT } from "../../../shared/auth/generate-jwt";
 import logger from "../../../shared/logger/logger-module";
 import {
@@ -12,6 +11,7 @@ import {
 } from "../../../shared/constants/constants-module";
 import bcrypt from "bcryptjs";
 import * as UserRepository from "../data-access/user-repository";
+import { LoginUserInput } from "../common/user-types";
 
 interface Success extends GenericSuccess {
   token: string;
