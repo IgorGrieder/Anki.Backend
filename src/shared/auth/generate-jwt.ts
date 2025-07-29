@@ -1,6 +1,6 @@
 import jsonwebtoken from "jsonwebtoken";
 import { jwtConstants } from "../constants/constants-module";
-import { UserDocument } from "../../modules/user/user-types";
+import { UserDocument } from "../../modules/user/common/user-types";
 
 const generateJWT = (user: UserDocument): string => {
   const payload = {
