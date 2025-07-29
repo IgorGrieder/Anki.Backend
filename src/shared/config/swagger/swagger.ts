@@ -1,26 +1,12 @@
-import { OpenAPIV3 } from "openapi-types";
-import { userPaths } from "../../src/modules/users/presentation/user-swagger";
-import { ErrorSchema } from "./components";
+import swaggerJsdoc from "swagger-jsdoc";
 
-export const openApiDocument: OpenAPIV3.Document = {
+const options = {
   openapi: "3.0.0",
   info: {
     title: "Anki Cards API",
     version: "1.0.0",
   },
-  paths: {
-    ...userPaths,
-  },
-  components: {
-    schemas: {
-      Error: ErrorSchema,
-    },
-    securitySchemes: {
-      BearerAuth: {
-        type: "http",
-        scheme: "bearer",
-        bearerFormat: "JWT",
-      },
-    },
-  },
+  apis: ["./src/routes*.js"],
 };
+
+export const openapiSpecification = swaggerJsdoc(options);
