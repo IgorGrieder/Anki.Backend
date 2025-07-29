@@ -1,24 +1,19 @@
 import express, { Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { mongoConnection } from "./shared/infra/persistance/mongo/mongo";
+import { mongoConnection } from "./shared/config/db/mongo";
 import { httpMiddleware } from "./shared/middlewares/http-middleware";
-import dotenv from "dotenv";
-import * as swaggerUi from "swagger-ui-express";
-import { openApiDocument } from "./shared/infra/swagger/swagger";
-import { userRouter } from "./features/users/presentation";
-
-dotenv.config();
-export const PORT = process.env.PORT;
-
-export const app: Application = express();
+import { createUserRouter } from "./modules/user/presentation/routes";
+import swaggerUi from "swagger-ui-express";
+import { openapiSpecification } from "./shared/config/swagger/swagger";
+import { config } from "./shared/config/env/env-config";
 
 export const setupStart = async (app: Application) => {
   await mongoConnection();
 
   app.use(
     cors({
-      origin: `http://localhost:${PORT}`,
+      origin: [`http://localhost:${config.PORT}`, "http://localhost:3000"],
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     })
@@ -29,9 +24,7 @@ export const setupStart = async (app: Application) => {
   app.use(cookieParser());
   app.use(httpMiddleware);
 
-  // RoutesMux
-  /*  app.use("/api/cards", cardRoutes); */
-  /* app.use("/api/collections", collectionRoutes) */
-  app.use(userRouter);
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
+  app.use("/api", createUserRouter());
+
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 };

@@ -1,16 +1,18 @@
-import { infoLogger } from "./shared/infra/logger/info-logger.js";
-import { errorLogger } from "./shared/infra/logger/error-logger.js";
-import { app, setupStart, PORT } from "./app.js";
+import express, { Application } from "express";
+import logger from "../src/shared/logger/logger-module";
+import { setupStart } from "./app.js";
+import { config } from "./shared/config/env/env-config";
 
 const startServer = async () => {
   try {
+    const app: Application = express();
     await setupStart(app);
 
-    app.listen(PORT, () => {
-      infoLogger(`Server running. Port: ${PORT}`);
+    app.listen(config.PORT, () => {
+      logger.infoLogger(`Server running. Port: ${config.PORT}`);
     });
   } catch (err: any) {
-    errorLogger("An error occured while starting the server", err);
+    logger.errorLogger("An error occured while starting the server", err);
     process.exit(1);
   }
 };

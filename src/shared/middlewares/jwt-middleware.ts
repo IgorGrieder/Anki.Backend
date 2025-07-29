@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { unauthorizedCode } from "../../shared/constants/http-code-constants";
-import {
-  noToken,
-  invalidToken,
-} from "../../shared/constants/message-constants";
-import { errorLogger } from "../infra/logger/error-logger";
-import { validateJWT } from "../infra/auth/validate-jwt";
+import { httpCodes, resMessages } from "../constants/constants-module";
+import logger from "../logger/logger-module";
+import { validateJWT } from "../auth/validate-jwt";
 
 export const validateJWTMiddlewear = async (
   req: Request,
@@ -16,7 +12,7 @@ export const validateJWTMiddlewear = async (
     const token = req.cookies.jwt;
 
     if (!token) {
-      res.status(unauthorizedCode).json({ message: noToken });
+      res.status(httpCodes.unauthorized).json({ message: resMessages.noToken });
       return;
     }
 
@@ -30,8 +26,10 @@ export const validateJWTMiddlewear = async (
     req.body.jwt = result.value.decoded;
     next();
   } catch (err: any) {
-    errorLogger("Error trying to validate JWT Token", err);
-    res.status(unauthorizedCode).json({ message: invalidToken });
+    logger.errorLogger("Error trying to validate JWT Token", err);
+    res
+      .status(httpCodes.unauthorized)
+      .json({ message: resMessages.invalidToken });
     return;
   }
 };

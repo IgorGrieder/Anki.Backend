@@ -1,5 +1,5 @@
 import { Request, NextFunction, Response } from "express";
-import { httpLogger } from "../infra/logger/http-logger";
+import logger from "../logger/logger-module";
 
 // Middleware with the purpose of loggin every request sent to the application
 export const httpMiddleware = (
@@ -16,6 +16,6 @@ export const httpMiddleware = (
     body: req.body,
   };
 
-  httpLogger("Incoming request", requestDetails);
+  logger.httpLogger("Incoming request", requestDetails);
   next();
 };

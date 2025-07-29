@@ -1,8 +1,10 @@
-// constants for HTTP Codes ---------------------------------------------------
-export const notFoundCode = 404;
-export const okCode = 200;
-export const internalServerErrorCode = 500;
-export const unauthorizedCode = 401;
-export const noContentCode = 204;
-export const badRequest = 400;
-export const created = 201;
+export const httpCodes = {
+  ok: 200,
+  created: 201,
+  noContent: 204,
+  badRequest: 400,
+  unauthorized: 401,
+  notFound: 404,
+  conflcit: 409,
+  internalServerError: 500,
+};

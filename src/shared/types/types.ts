@@ -1,19 +1,21 @@
-export type Result<TSuccess, TError> =
+type Result<TSuccess, TError> =
   | { kind: "success"; value: TSuccess }
   | { kind: "error"; error: TError };
 
-export enum LogLevel {
+enum LogLevel {
   INFO = "INFO",
   ERROR = "ERROR",
   DEBUG = "DEBUG",
   HTTP = "HTTP",
 }
 
-export interface GenericError {
+interface GenericError {
   code: number;
   msg: string;
 }
 
-export interface GenericSuccess {
+interface GenericSuccess {
   code: number;
 }
+
+export { Result, LogLevel, GenericSuccess, GenericError };
