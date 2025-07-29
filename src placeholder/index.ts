@@ -1,4 +1,4 @@
-import logger from "../src placeholder/shared/logger/logger-module.js";
+import logger from "../src/shared/logger/logger-module";
 import { app, setupStart, PORT } from "./app.js";
 
 const startServer = async () => {

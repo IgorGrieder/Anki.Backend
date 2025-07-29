@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import z from "zod";
-import { badRequest } from "../constants/http-code-constants";
+import { badRequest } from "../../shared/constants/http-code-constants";
 
 export const genericValidator = <T extends z.ZodRawShape>(
   schema: z.ZodObject<T>,
