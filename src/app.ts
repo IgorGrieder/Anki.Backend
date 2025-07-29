@@ -3,20 +3,17 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { mongoConnection } from "./shared/config/db/mongo";
 import { httpMiddleware } from "./shared/middlewares/http-middleware";
-import dotenv from "dotenv";
 import { createUserRouter } from "./modules/user/presentation/routes";
 import swaggerUi from "swagger-ui-express";
 import { openapiSpecification } from "./shared/config/swagger/swagger";
-
-dotenv.config();
-export const PORT = process.env.PORT;
+import { config } from "./shared/config/env/env-config";
 
 export const setupStart = async (app: Application) => {
   await mongoConnection();
 
   app.use(
     cors({
-      origin: [`http://localhost:${PORT}`, "http://localhost:3000"],
+      origin: [`http://localhost:${config.PORT}`, "http://localhost:3000"],
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     })

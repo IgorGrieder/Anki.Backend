@@ -1,5 +1,5 @@
 import swaggerJsdoc from "swagger-jsdoc";
-import { PORT } from "../../../app";
+import { config } from "../env/env-config";
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -10,7 +10,7 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
-        url: `http://localhost:8081/`,
+        url: `http://localhost:${config.PORT}/`,
       },
     ],
   },
