@@ -3,5 +3,5 @@ export const jwtConstants = {
   sameSite: "strict",
   cookieName: "jwt",
   saltRounds: 10,
-  expiresIn: "1h",
+  expiresIn: 3600,
 };

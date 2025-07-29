@@ -11,26 +11,20 @@ import {
   resMessages,
 } from "../../../shared/constants/constants-module";
 import bcrypt from "bcryptjs";
-import { UserModel } from "../data-access/user-model";
-import { User, UserDocument } from "../user-types";
+import {
+  findUserByLogin,
+  updateLastLogin,
+} from "../data-access/user-repository";
 
 interface Success extends GenericSuccess {
   token: string;
 }
 
-const updateLastLogin = async (user: UserDocument) => {
-  await UserModel.findByIdAndUpdate(user._id, {
-    last_login_at: new Date(),
-  });
-};
-
 export const loginUser = async (
   user: LoginUserInput
 ): Promise<Result<Success, GenericError>> => {
   try {
-    const userFound = await UserModel.findOne({
-      $or: [{ email: user.login }, { username: user.login }],
-    });
+    const userFound = await findUserByLogin(user);
 
     if (!userFound) {
       return {
@@ -64,7 +58,7 @@ export const loginUser = async (
     }
 
     // Updating the user last login
-    updateLastLogin(userFound);
+    await updateLastLogin(userFound);
 
     // Generate JWT token
     const token = generateJWT(userFound);
