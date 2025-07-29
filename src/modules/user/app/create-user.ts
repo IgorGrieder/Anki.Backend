@@ -48,7 +48,7 @@ export const createUser = async (
       return {
         kind: "error",
         error: {
-          code: httpCodes.badRequest,
+          code: httpCodes.conflcit,
           msg: "Email/username already in use",
         },
       };

@@ -5,5 +5,6 @@ export const httpCodes = {
   badRequest: 400,
   unauthorized: 401,
   notFound: 404,
+  conflcit: 409,
   internalServerError: 500,
 };
