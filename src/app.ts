@@ -18,7 +18,7 @@ export const setupStart = async (app: Application) => {
 
   app.use(
     cors({
-      origin: `http://localhost:${PORT}`,
+      origin: [`http://localhost:${PORT}`, "http://localhost:3000"],
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     })

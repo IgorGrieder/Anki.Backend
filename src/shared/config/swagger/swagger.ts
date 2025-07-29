@@ -1,4 +1,5 @@
 import swaggerJsdoc from "swagger-jsdoc";
+import { PORT } from "../../../app";
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -7,6 +8,11 @@ const options: swaggerJsdoc.Options = {
       title: "Anki Cards API",
       version: "1.0.0",
     },
+    servers: [
+      {
+        url: `http://localhost:8081/`,
+      },
+    ],
   },
   apis: ["**/routes.ts"],
 };

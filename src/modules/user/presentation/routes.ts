@@ -5,11 +5,11 @@ import * as UserHandlers from "./user-handlers";
 
 export const createUserRouter = () => {
   const userRouter = Router();
-  const path = "/user";
+  const path = "users";
 
   /**
    * @openapi
-   * /users/create-user:
+   * /api/users/create-user:
    *   post:
    *     tags:
    *       - Users
