@@ -1,8 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import {
-  httpCodeConstants,
-  messageConstants,
-} from "../../shared/constants/constants-module";
+import { httpCodes, resMessages } from "../constants/constants-module";
 import logger from "../logger/logger-module";
 import { validateJWT } from "../auth/validate-jwt";
 
@@ -15,9 +12,7 @@ export const validateJWTMiddlewear = async (
     const token = req.cookies.jwt;
 
     if (!token) {
-      res
-        .status(httpCodeConstants.unauthorized)
-        .json({ message: messageConstants.noToken });
+      res.status(httpCodes.unauthorized).json({ message: resMessages.noToken });
       return;
     }
 
@@ -33,8 +28,8 @@ export const validateJWTMiddlewear = async (
   } catch (err: any) {
     logger.errorLogger("Error trying to validate JWT Token", err);
     res
-      .status(httpCodeConstants.unauthorized)
-      .json({ message: messageConstants.invalidToken });
+      .status(httpCodes.unauthorized)
+      .json({ message: resMessages.invalidToken });
     return;
   }
 };
