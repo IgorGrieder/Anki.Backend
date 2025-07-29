@@ -6,7 +6,7 @@ import { httpMiddleware } from "./shared/middlewares/http-middleware";
 import dotenv from "dotenv";
 import * as swaggerUi from "swagger-ui-express";
 import { openApiDocument } from "./shared/config/swagger/swagger";
-import { createUserRouter } from "./modules/users/presentation";
+import { createUserRouter } from "./modules/user/presentation";
 
 dotenv.config();
 export const PORT = process.env.PORT;
@@ -29,7 +29,7 @@ export const setupStart = async (app: Application) => {
   app.use(cookieParser());
   app.use(httpMiddleware);
 
-  app.use("/api/users", createUserRouter());
+  app.use("/api", createUserRouter());
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 };

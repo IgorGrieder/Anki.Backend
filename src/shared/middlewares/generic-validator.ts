@@ -1,31 +1,15 @@
 import { Request, Response, NextFunction } from "express";
+import { httpCodes } from "../constants/http-code-constants";
 import z from "zod";
-import { badRequest } from "../constants/http-code-constants";
 
-export const genericValidator = <T extends z.ZodRawShape>(
-  schema: z.ZodObject<T>,
-  target: "body" | "params" | "query" = "body"
+export const genericBodyValidator = <T extends z.ZodRawShape>(
+  schema: z.ZodObject<T>
 ) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    let data;
-    switch (target) {
-      case "body":
-        data = req.body;
-        break;
-      case "params":
-        data = req.params;
-        break;
-      case "query":
-        data = req.query;
-        break;
-      default:
-        data = req.body;
-    }
-
-    const result = schema.safeParse(data);
+    const result = schema.safeParse(req.body);
 
     if (!result.success) {
-      res.status(badRequest).json({
+      res.status(httpCodes.badRequest).json({
         message: "Validation failed",
         errors: result.error.issues.map((err) => ({
           path: err.path.join("."),
@@ -36,6 +20,7 @@ export const genericValidator = <T extends z.ZodRawShape>(
       return;
     }
 
+    req.body.validated = result.data;
     next();
   };
 };
