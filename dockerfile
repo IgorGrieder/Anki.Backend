@@ -8,6 +8,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 8085
 
 CMD [ "npx", "tsx", "watch", "src/index.ts" ]
