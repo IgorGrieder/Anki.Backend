@@ -81,11 +81,6 @@ const validateCreateAccount = async (req, res, next) => {
 };
 
 // Routes ---------------------------------------------------------------------
-userRoutes.post("/logout", (_, res) => {
-  res.clearCookie("jwt");
-  res.json({ loggedOut: true, message: logoutMessage });
-});
-
 userRoutes.post(
   "/change-password",
   validatePasswordChange,
@@ -117,31 +112,6 @@ userRoutes.post(
     if (result.code === internalServerErrorCode) {
       return res.status(result.code).json({
         passwordChanged: false,
-        message: unexpectedError,
-      });
-    }
-  }
-);
-
-userRoutes.delete(
-  "/delete-account",
-  Utils.validateJWTMiddlewear,
-  async (req, res) => {
-    const { userId } = req.body;
-
-    const result = await LoginService.deleteUser(userId);
-
-    // In case of success
-    if ((result.code = noContentCode)) {
-      return res.status(result.code).json({
-        deleted: true,
-      });
-    }
-
-    // Internal server error
-    if (result.code === internalServerErrorCode) {
-      return res.status(result.code).json({
-        deleted: false,
         message: unexpectedError,
       });
     }

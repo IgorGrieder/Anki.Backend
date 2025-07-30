@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { createUserSchema, loginUserSchema } from "./user-inputs";
+import {
+  createUserSchema,
+  deleteUserSchema,
+  loginUserSchema,
+} from "./user-inputs";
 import { genericBodyValidator } from "../../../shared/middlewares/generic-validator";
 import * as UserHandlers from "./user-handlers";
 
@@ -106,6 +110,12 @@ export const createUserRouter = () => {
   );
 
   userRouter.post(`${path}/logout`, UserHandlers.logoutHandler);
+
+  userRouter.delete(
+    `${path}/delete-user`,
+    genericBodyValidator(deleteUserSchema),
+    UserHandlers.deleteUserHanlder
+  );
 
   return userRouter;
 };

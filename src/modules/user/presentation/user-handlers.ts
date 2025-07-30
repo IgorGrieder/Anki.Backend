@@ -6,7 +6,12 @@ import {
 } from "../../../shared/constants/constants-module";
 import { createUser } from "../app/create-user";
 import { loginUser } from "../app/login-user";
-import { CreateUserInput, LoginUserInput } from "../common/user-types";
+import {
+  CreateUserInput,
+  DeleteUserInput,
+  LoginUserInput,
+} from "../common/user-types";
+import { deleteUser } from "../app/delete-user";
 
 export const createUserHandler = async (req: Request, res: Response) => {
   const createUserInput: CreateUserInput = req.body.validated;
@@ -45,7 +50,6 @@ export const loginUserHandler = async (req: Request, res: Response) => {
   }
 
   res.status(result.error.code).json({
-    logged: false,
     message: result.error.msg,
   });
 };
@@ -56,4 +60,18 @@ export const logoutHandler = (_: Request, res: Response) => {
     .status(httpCodes.ok)
     .json({ loggedOut: true, message: resMessages.logoutMessage });
   return;
+};
+
+export const deleteUserHanlder = async (req: Request, res: Response) => {
+  const deleteUserInput: DeleteUserInput = req.body.validated;
+  const result = await deleteUser(deleteUserInput);
+
+  if (result.kind === "success") {
+    res.status(result.value.code);
+    return;
+  }
+
+  res.status(result.error.code).json({
+    message: result.error.msg,
+  });
 };

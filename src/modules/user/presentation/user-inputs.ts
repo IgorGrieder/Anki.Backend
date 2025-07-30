@@ -31,3 +31,7 @@ export const loginUserSchema = z.object({
     error: "Password must be at least 6 characters long",
   }),
 });
+
+export const deleteUserSchema = z.object({
+  id: z.string(),
+});

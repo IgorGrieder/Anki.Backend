@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { createUserSchema, loginUserSchema } from "../presentation/user-inputs";
+import {
+  createUserSchema,
+  deleteUserSchema,
+  loginUserSchema,
+} from "../presentation/user-inputs";
 
 // Documents types
 export const userDocumentSchema = z.object({
@@ -34,3 +38,4 @@ export type User = Readonly<UserDocument>;
 // Inputs -----------------------------------------------------
 export type LoginUserInput = z.infer<typeof loginUserSchema>;
 export type CreateUserInput = z.infer<typeof createUserSchema>;
+export type DeleteUserInput = z.infer<typeof deleteUserSchema>;
