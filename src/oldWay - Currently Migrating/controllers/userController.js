@@ -81,32 +81,6 @@ const validateCreateAccount = async (req, res, next) => {
 };
 
 // Routes ---------------------------------------------------------------------
-userRoutes.post("/create-account", validateCreateAccount, async (req, res) => {
-  const { email, username, password } = req.body;
-  const result = await LoginService.createAccount(email, username, password);
-
-  if (result.accountCreated) {
-    res.cookie("jwt", result.token, {
-      httpOnly: true,
-      secure: process.env.ENVIROMENT === "DEV" ? false : true,
-      sameSite,
-      maxAge,
-    });
-
-    return res
-      .status(okCode)
-      .json({ accountCreated: true, username: result.username });
-  }
-
-  // Internal server error
-  if (result.code === internalServerErrorCode) {
-    return res.status(result.code).json({
-      accountCreated: false,
-      message: unexpectedError,
-    });
-  }
-});
-
 userRoutes.post("/logout", (_, res) => {
   res.clearCookie("jwt");
   res.json({ loggedOut: true, message: logoutMessage });

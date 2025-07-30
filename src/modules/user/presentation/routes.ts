@@ -105,5 +105,7 @@ export const createUserRouter = () => {
     UserHandlers.loginUserHandler
   );
 
+  userRouter.post(`${path}/logout`, UserHandlers.logoutHandler);
+
   return userRouter;
 };

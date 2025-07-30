@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { jwtConstants } from "../../../shared/constants/constants-module";
+import {
+  httpCodes,
+  jwtConstants,
+  resMessages,
+} from "../../../shared/constants/constants-module";
 import { createUser } from "../app/create-user";
 import { loginUser } from "../app/login-user";
 import { CreateUserInput, LoginUserInput } from "../common/user-types";
@@ -44,4 +48,12 @@ export const loginUserHandler = async (req: Request, res: Response) => {
     logged: false,
     message: result.error.msg,
   });
+};
+
+export const logoutHandler = (_: Request, res: Response) => {
+  res.clearCookie("jwt");
+  res
+    .status(httpCodes.ok)
+    .json({ loggedOut: true, message: resMessages.logoutMessage });
+  return;
 };
