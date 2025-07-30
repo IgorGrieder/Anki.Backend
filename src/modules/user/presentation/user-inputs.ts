@@ -31,6 +31,3 @@ export const loginUserSchema = z.object({
     error: "Password must be at least 6 characters long",
   }),
 });
-
-export type LoginUserInput = z.infer<typeof loginUserSchema>;
-export type CreateUserInput = z.infer<typeof createUserSchema>;
