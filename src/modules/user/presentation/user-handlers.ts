@@ -10,8 +10,10 @@ import {
   CreateUserInput,
   DeleteUserInput,
   LoginUserInput,
+  PasswordChangeInput,
 } from "../common/user-types";
 import { deleteUser } from "../app/delete-user";
+import { changeUserPassword } from "../app/update-password-user";
 
 export const createUserHandler = async (req: Request, res: Response) => {
   const createUserInput: CreateUserInput = req.body.validated;
@@ -65,6 +67,20 @@ export const logoutHandler = (_: Request, res: Response) => {
 export const deleteUserHanlder = async (req: Request, res: Response) => {
   const deleteUserInput: DeleteUserInput = req.body.validated;
   const result = await deleteUser(deleteUserInput);
+
+  if (result.kind === "success") {
+    res.status(result.value.code);
+    return;
+  }
+
+  res.status(result.error.code).json({
+    message: result.error.msg,
+  });
+};
+
+export const changePasswordHandler = async (req: Request, res: Response) => {
+  const userPassChange: PasswordChangeInput = req.body.validated;
+  const result = await changeUserPassword(userPassChange);
 
   if (result.kind === "success") {
     res.status(result.value.code);

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  changePasswordSchema,
   createUserSchema,
   deleteUserSchema,
   loginUserSchema,
@@ -115,6 +116,12 @@ export const createUserRouter = () => {
     `${path}/delete-user`,
     genericBodyValidator(deleteUserSchema),
     UserHandlers.deleteUserHanlder
+  );
+
+  userRouter.patch(
+    `${path}/change-password`,
+    genericBodyValidator(changePasswordSchema),
+    UserHandlers.createUserHandler
   );
 
   return userRouter;
