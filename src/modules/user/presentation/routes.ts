@@ -1,10 +1,5 @@
 import { Router } from "express";
-import {
-  changePasswordSchema,
-  createUserSchema,
-  deleteUserSchema,
-  loginUserSchema,
-} from "./user-inputs";
+import * as Schemas from "./user-inputs";
 import { genericBodyValidator } from "../../../shared/middlewares/generic-validator";
 import * as UserHandlers from "./user-handlers";
 
@@ -100,13 +95,13 @@ export const createUserRouter = () => {
    */
   userRouter.post(
     `${path}/create-user`,
-    genericBodyValidator(createUserSchema),
+    genericBodyValidator(Schemas.createUserSchema),
     UserHandlers.createUserHandler
   );
 
   userRouter.post(
     `${path}/login`,
-    genericBodyValidator(loginUserSchema),
+    genericBodyValidator(Schemas.loginUserSchema),
     UserHandlers.loginUserHandler
   );
 
@@ -114,13 +109,13 @@ export const createUserRouter = () => {
 
   userRouter.delete(
     `${path}/delete-user`,
-    genericBodyValidator(deleteUserSchema),
+    genericBodyValidator(Schemas.deleteUserSchema),
     UserHandlers.deleteUserHanlder
   );
 
   userRouter.patch(
     `${path}/change-password`,
-    genericBodyValidator(changePasswordSchema),
+    genericBodyValidator(Schemas.changePasswordSchema),
     UserHandlers.createUserHandler
   );
 
