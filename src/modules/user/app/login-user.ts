@@ -16,7 +16,6 @@ import { LoginUserInput } from "../common/user-types";
 interface Success extends GenericSuccess {
   token: string;
 }
-
 export const loginUser = async (
   user: LoginUserInput
 ): Promise<Result<Success, GenericError>> => {

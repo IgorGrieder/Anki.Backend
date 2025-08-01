@@ -1,0 +1,26 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: anki-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --save 60 1
+
+  app:
+    build: .
+    container_name: anki-backend
+    ports:
+      - "8085:8085"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - ENVIROMENT=DEV
+      - PORT=8085
+    env_file:
+      - ./.env
+
+volumes:
+  redis_data:

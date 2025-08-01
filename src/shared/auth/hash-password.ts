@@ -2,9 +2,9 @@ import { CreateUserInput } from "../../modules/user/common/user-types";
 import { jwtConstants } from "../constants/constants-module";
 import bcrypt from "bcrypt";
 
-const hashPassword = async (
-  user: CreateUserInput
-): Promise<CreateUserInput> => {
+const hashPassword = async <T extends { password: string }>(
+  user: T
+): Promise<T> => {
   try {
     if (!user.password) {
       throw new Error("Password is not provided, cannot hash.");

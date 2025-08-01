@@ -1,5 +1,6 @@
 import {
   CreateUserInput,
+  DeleteUserInput,
   LoginUserInput,
   UserDocument,
 } from "../common/user-types";
@@ -23,4 +24,8 @@ export const findUserByLogin = async (
   return await UserModel.findOne({
     $or: [{ email: user.login }, { username: user.login }],
   });
+};
+
+export const deleteUserById = async (user: DeleteUserInput) => {
+  await UserModel.findByIdAndUpdate(user.id, { is_active: false });
 };
