@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  changePasswordSchema,
   createUserSchema,
   deleteUserSchema,
   loginUserSchema,
@@ -39,3 +40,4 @@ export type User = Readonly<UserDocument>;
 export type LoginUserInput = z.infer<typeof loginUserSchema>;
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type DeleteUserInput = z.infer<typeof deleteUserSchema>;
+export type PasswordChangeInput = z.infer<typeof changePasswordSchema>;

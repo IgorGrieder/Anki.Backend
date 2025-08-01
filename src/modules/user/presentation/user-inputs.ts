@@ -35,3 +35,15 @@ export const loginUserSchema = z.object({
 export const deleteUserSchema = z.object({
   id: z.string(),
 });
+
+export const changePasswordSchema = z.object({
+  email: z.email({
+    error: "Please provide a valid email address",
+  }),
+  oldPassword: z.string().min(3, {
+    error: "Username must be at least 3 characters long",
+  }),
+  password: z.string().min(6, {
+    error: "Password must be at least 6 characters long",
+  }),
+});
