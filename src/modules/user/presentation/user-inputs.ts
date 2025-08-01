@@ -37,9 +37,14 @@ export const deleteUserSchema = z.object({
 });
 
 export const changePasswordSchema = z.object({
-  email: z.email({
-    error: "Please provide a valid email address",
-  }),
+  login: z.union([
+    z.email({
+      error: "Please provide a valid email address",
+    }),
+    z.string().min(3, {
+      error: "Username must be at least 3 characters long",
+    }),
+  ]),
   oldPassword: z.string().min(3, {
     error: "Username must be at least 3 characters long",
   }),
