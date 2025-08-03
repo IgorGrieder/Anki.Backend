@@ -22,5 +22,12 @@ services:
     env_file:
       - ./.env
 
+  mongodb-test:
+    image: mongo:latest
+    container_name: mongo-test-db
+    ports:
+      - "27017:27017"
+
 volumes:
   redis_data:
+
