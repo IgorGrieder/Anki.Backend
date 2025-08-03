@@ -3,7 +3,7 @@ import * as Schemas from "./user-inputs";
 import { genericBodyValidator } from "../../../shared/middlewares/generic-validator";
 import * as UserHandlers from "./user-handlers";
 
-export const createUserRouter = () => {
+export const createCollectionRouter = () => {
   const userRouter = Router();
   const path = "/users";
 

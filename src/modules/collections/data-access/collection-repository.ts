@@ -4,7 +4,7 @@ import {
   LoginUserInput,
   UserDocument,
 } from "../common/user-types";
-import { UserModel } from "./card-model";
+import { UserModel } from "./collection-model";
 
 export const updateLastLogin = async (user: UserDocument) => {
   await UserModel.findByIdAndUpdate(user._id, {
