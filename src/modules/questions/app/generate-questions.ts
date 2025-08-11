@@ -1,17 +1,23 @@
 import { GenerateQuestionsInput, QuestionsResponse } from "../common/types";
-import { fetchFromCache, saveToCache } from "../data-access/vector-cache";
 import { generateQuestionsWithLLM } from "./llm";
-
-const buildCacheKey = (input: GenerateQuestionsInput): string => {
-  return `${input.language}::${input.topic}::${input.numQuestions}`;
-};
+import { queryQuestionsCache, upsertQuestionsCache } from "../../../shared/infra/vector/qdrant/questions-cache";
 
 export const generateQuestions = async (input: GenerateQuestionsInput): Promise<QuestionsResponse> => {
-  const key = buildCacheKey(input);
-  const cached = await fetchFromCache(key);
-  if (cached) return cached;
+  const cached = await queryQuestionsCache({
+    language: input.language,
+    topic: input.topic,
+    numQuestions: input.numQuestions,
+    minScore: 0.88,
+  });
+
+  if (cached) return cached.response;
 
   const fresh = await generateQuestionsWithLLM(input);
-  await saveToCache(key, fresh);
+  await upsertQuestionsCache({
+    language: input.language,
+    topic: input.topic,
+    numQuestions: input.numQuestions,
+    response: fresh,
+  });
   return fresh;
 };
