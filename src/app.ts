@@ -8,6 +8,7 @@ import { createCollectionRouter } from "./modules/collections/presentation/route
 import swaggerUi from "swagger-ui-express";
 import { openapiSpecification } from "./shared/config/swagger/swagger";
 import { config } from "./shared/config/env/env-config";
+import { startMailWorker } from "./shared/infra/queue/mail-queue";
 
 export const setupStart = async (app: Application) => {
   await mongoConnection();
@@ -29,4 +30,7 @@ export const setupStart = async (app: Application) => {
   app.use("/api", createCollectionRouter());
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+
+  // Email worker
+  void startMailWorker();
 };

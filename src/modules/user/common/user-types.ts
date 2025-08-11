@@ -4,6 +4,8 @@ import {
   createUserSchema,
   deleteUserSchema,
   loginUserSchema,
+  requestPasswordResetSchema,
+  performPasswordResetSchema,
 } from "../presentation/user-inputs";
 
 // Documents types
@@ -41,3 +43,9 @@ export type LoginUserInput = z.infer<typeof loginUserSchema>;
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type DeleteUserInput = z.infer<typeof deleteUserSchema>;
 export type PasswordChangeInput = z.infer<typeof changePasswordSchema>;
+export type RequestPasswordResetInput = z.infer<
+  typeof requestPasswordResetSchema
+>;
+export type PerformPasswordResetInput = z.infer<
+  typeof performPasswordResetSchema
+>;

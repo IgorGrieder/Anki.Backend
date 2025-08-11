@@ -341,5 +341,18 @@ export const createUserRouter = () => {
     UserHandlers.createUserHandler
   );
 
+  // Password reset (code via email + perform)
+  userRouter.post(
+    `${path}/request-password-reset`,
+    genericBodyValidator(Schemas.requestPasswordResetSchema),
+    UserHandlers.requestPasswordResetHandler
+  );
+
+  userRouter.post(
+    `${path}/perform-password-reset`,
+    genericBodyValidator(Schemas.performPasswordResetSchema),
+    UserHandlers.performPasswordResetHandler
+  );
+
   return userRouter;
 };
