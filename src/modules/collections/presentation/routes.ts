@@ -1,123 +1,56 @@
 import { Router } from "express";
-import * as Schemas from "./user-inputs";
 import { genericBodyValidator } from "../../../shared/middlewares/generic-validator";
-import * as UserHandlers from "./user-handlers";
+import { validateJWTMiddlewear } from "../../../shared/middlewares/jwt-middleware";
+import * as Schemas from "./user-inputs";
+import * as Handlers from "./user-handlers";
+import { upload } from "../../../shared/infra/upload/multer";
 
 export const createCollectionRouter = () => {
-  const userRouter = Router();
-  const path = "/users";
+  const router = Router();
+  const path = "/collections";
 
-  /**
-   * @openapi
-   * /api/users/create-user:
-   *   post:
-   *     tags:
-   *       - Users
-   *     summary: Create a new user account
-   *     description: Registers a new user with their email and password, sets a session cookie upon success.
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             type: object
-   *             required:
-   *               - email
-   *               - password
-   *             properties:
-   *               email:
-   *                 type: string
-   *                 format: email
-   *                 description: The user's email address. Must be unique.
-   *                 example: jane.doe@example.com
-   *               password:
-   *                 type: string
-   *                 format: password
-   *                 description: The user's password (min 8 characters).
-   *                 example: S3cureP@ssw0rd!
-   *               username:
-   *                 type: string
-   *                 description: The user's public username (optional, must be unique if provided).
-   *                 example: janedoe99
-   *     responses:
-   *       '201':
-   *         description: User created successfully. An HTTP-only session cookie is set.
-   *         headers:
-   *           Set-Cookie:
-   *             schema:
-   *               type: string
-   *             description: The session cookie used for authenticating subsequent requests.
-   *             example: session_token=abc123xyz; Path=/; HttpOnly; Secure; SameSite=Strict
-   *       '400':
-   *         description: Validation failed. The request body contains invalid data.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 message:
-   *                   type: string
-   *                   example: Validation failed
-   *                 errors:
-   *                   type: array
-   *                   items:
-   *                     type: object
-   *                     properties:
-   *                       path:
-   *                         type: string
-   *                         example: password
-   *                       message:
-   *                         type: string
-   *                         example: Password must be at least 8 characters long
-   *                       code:
-   *                         type: string
-   *                         example: too_small
-   *       '409':
-   *         description: Conflict. A user with the provided email already exists.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 message:
-   *                   type: string
-   *                   example: A user with this email already exists.
-   *       '500':
-   *         description: Internal Server Error.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 message:
-   *                   type: string
-   *                   example: An unexpected error occurred.
-   */
-  userRouter.post(
-    `${path}/create-user`,
-    genericBodyValidator(Schemas.createUserSchema),
-    UserHandlers.createUserHandler
+  router.get(`${path}/get-collections`, validateJWTMiddlewear, Handlers.getCollectionsHandler);
+
+  router.post(
+    `${path}/create-collection`,
+    validateJWTMiddlewear,
+    genericBodyValidator(Schemas.createCollectionSchema),
+    Handlers.createCollectionHandler
   );
 
-  userRouter.post(
-    `${path}/login`,
-    genericBodyValidator(Schemas.loginUserSchema),
-    UserHandlers.loginUserHandler
+  router.post(
+    `${path}/delete-collection`,
+    validateJWTMiddlewear,
+    genericBodyValidator(Schemas.deleteCollectionSchema),
+    Handlers.deleteCollectionHandler
   );
 
-  userRouter.post(`${path}/logout`, UserHandlers.logoutHandler);
-
-  userRouter.delete(
-    `${path}/delete-user`,
-    genericBodyValidator(Schemas.deleteUserSchema),
-    UserHandlers.deleteUserHanlder
+  // Cards
+  router.post(
+    `${path}/add-card`,
+    validateJWTMiddlewear,
+    upload.single("file"),
+    genericBodyValidator(Schemas.addCardSchema),
+    Handlers.addCardHandler
   );
 
-  userRouter.patch(
-    `${path}/change-password`,
-    genericBodyValidator(Schemas.changePasswordSchema),
-    UserHandlers.createUserHandler
+  router.patch(
+    `${path}/update-card`,
+    validateJWTMiddlewear,
+    upload.single("file"),
+    genericBodyValidator(Schemas.updateCardSchema),
+    Handlers.updateCardHandler
   );
 
-  return userRouter;
+  router.patch(
+    `${path}/delete-card`,
+    validateJWTMiddlewear,
+    genericBodyValidator(Schemas.deleteCardSchema),
+    Handlers.deleteCardHandler
+  );
+
+  // Images
+  router.get(`${path}/image/:imageId`, Handlers.streamImageHandler);
+
+  return router;
 };

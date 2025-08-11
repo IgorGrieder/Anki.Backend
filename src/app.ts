@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { mongoConnection } from "./shared/config/db/mongo";
 import { httpMiddleware } from "./shared/middlewares/http-middleware";
 import { createUserRouter } from "./modules/user/presentation/routes";
+import { createCollectionRouter } from "./modules/collections/presentation/routes";
 import swaggerUi from "swagger-ui-express";
 import { openapiSpecification } from "./shared/config/swagger/swagger";
 import { config } from "./shared/config/env/env-config";
@@ -25,6 +26,7 @@ export const setupStart = async (app: Application) => {
   app.use(httpMiddleware);
 
   app.use("/api", createUserRouter());
+  app.use("/api", createCollectionRouter());
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 };
