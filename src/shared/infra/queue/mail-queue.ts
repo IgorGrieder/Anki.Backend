@@ -1,5 +1,8 @@
 import { getRedis } from "../redis/redis-client";
-import { sendMail, MailJob } from "../mail/mailer";
+import type { MailJob } from "../mail/mailer";
+import { Worker } from "worker_threads";
+import path from "path";
+import url from "url";
 
 const QUEUE_KEY = "mail_queue";
 
@@ -8,20 +11,19 @@ export const addEmailJob = async (job: MailJob) => {
   await client.lpush(QUEUE_KEY, JSON.stringify(job));
 };
 
-export const startMailWorker = async (): Promise<void> => {
-  const client = getRedis();
-  const loop = async () => {
-    const res = await client.brpop(QUEUE_KEY, 0);
-    if (res && res[1]) {
-      try {
-        const job: MailJob = JSON.parse(res[1]);
-        await sendMail(job);
-      } catch (err: any) {
-        console.error("Mail worker error", err);
-      }
-    }
-    setImmediate(loop);
-  };
+let worker: Worker | null = null;
 
-  void loop();
+export const startMailWorker = () => {
+  if (worker) return;
+  const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+  const workerPath = path.join(__dirname, "mail-worker.js");
+  const workerUrl = url.pathToFileURL(workerPath);
+  worker = new Worker(workerUrl as unknown as string);
+  worker.on("error", (err) => {
+    console.error("Mail worker thread error", err);
+  });
+  worker.on("exit", (code) => {
+    console.error("Mail worker exited with code", code);
+    worker = null;
+  });
 };
