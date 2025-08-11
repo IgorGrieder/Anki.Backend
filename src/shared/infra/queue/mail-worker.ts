@@ -12,8 +12,7 @@ const run = async () => {
       try {
         const job: MailJob = JSON.parse(res[1]);
         await sendMail(job);
-      } catch (err) {
-        // eslint-disable-next-line no-console
+      } catch (err: any) {
         console.error("Mail worker error", err);
       }
     }
