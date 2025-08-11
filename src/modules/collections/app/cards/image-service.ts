@@ -1,10 +1,9 @@
-import S3Service from "../../../../shared/infra/s3/s3-service";
+import { uploadObject, deleteObject, getObjectStream } from "../../../../shared/infra/s3/s3-service";
 
 const bucket = process.env.BUCKET_NAME || "";
 
 export const uploadImage = async (file: Express.Multer.File, key: string) => {
-  const s3 = new S3Service();
-  return await s3.uploadObject({
+  return await uploadObject({
     bucket,
     key,
     body: file.buffer,
@@ -13,11 +12,9 @@ export const uploadImage = async (file: Express.Multer.File, key: string) => {
 };
 
 export const deleteImage = async (key: string) => {
-  const s3 = new S3Service();
-  return await s3.deleteObject({ bucket, key });
+  return await deleteObject({ bucket, key });
 };
 
 export const getImageStream = async (key: string) => {
-  const s3 = new S3Service();
-  return await s3.getObjectStream({ bucket, key });
+  return await getObjectStream({ bucket, key });
 };
