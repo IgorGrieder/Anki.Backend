@@ -338,21 +338,55 @@ export const createUserRouter = () => {
   userRouter.patch(
     `${path}/change-password`,
     genericBodyValidator(Schemas.changePasswordSchema),
-    UserHandlers.createUserHandler
+    UserHandlers.changePasswordHandler
   );
 
-  // Password reset (code via email + perform)
-  userRouter.post(
-    `${path}/request-password-reset`,
-    genericBodyValidator(Schemas.requestPasswordResetSchema),
-    UserHandlers.requestPasswordResetHandler
-  );
+  /**
+   * @openapi
+   * /api/users/request-password-reset:
+   *   post:
+   *     tags:
+   *       - Users
+   *     summary: Request a password reset code via email
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               email:
+   *                 type: string
+   *                 format: email
+   *     responses:
+   *       '204':
+   *         description: Code emailed (or ignored if user not found)
+   */
+  userRouter.post(`${path}/request-password-reset`, genericBodyValidator(Schemas.requestPasswordResetSchema), UserHandlers.requestPasswordResetHandler);
 
-  userRouter.post(
-    `${path}/perform-password-reset`,
-    genericBodyValidator(Schemas.performPasswordResetSchema),
-    UserHandlers.performPasswordResetHandler
-  );
+  /**
+   * @openapi
+   * /api/users/perform-password-reset:
+   *   post:
+   *     tags:
+   *       - Users
+   *     summary: Perform password reset using code
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               code:
+   *                 type: string
+   *               password:
+   *                 type: string
+   *     responses:
+   *       '204':
+   *         description: Password updated
+   */
+  userRouter.post(`${path}/perform-password-reset`, genericBodyValidator(Schemas.performPasswordResetSchema), UserHandlers.performPasswordResetHandler);
 
   return userRouter;
 };
