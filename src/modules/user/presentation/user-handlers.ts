@@ -14,6 +14,9 @@ import {
 } from "../common/user-types";
 import { deleteUser } from "../app/delete-user";
 import { changeUserPassword } from "../app/update-password-user";
+import { requestPasswordReset } from "../app/request-password-reset";
+import { performPasswordReset } from "../app/perform-password-reset";
+import { RequestPasswordResetInput, PerformPasswordResetInput } from "../common/user-types";
 
 export const createUserHandler = async (req: Request, res: Response) => {
   const createUserInput: CreateUserInput = req.body.validated;
@@ -90,4 +93,24 @@ export const changePasswordHandler = async (req: Request, res: Response) => {
   res.status(result.error.code).json({
     message: result.error.msg,
   });
+};
+
+export const requestPasswordResetHandler = async (req: Request, res: Response) => {
+  const input: RequestPasswordResetInput = req.body.validated;
+  const result = await requestPasswordReset(input);
+  if (result.kind === "success") {
+    res.status(result.value.code).send();
+    return;
+  }
+  res.status(result.error.code).json({ message: result.error.msg });
+};
+
+export const performPasswordResetHandler = async (req: Request, res: Response) => {
+  const input: PerformPasswordResetInput = req.body.validated;
+  const result = await performPasswordReset(input);
+  if (result.kind === "success") {
+    res.status(result.value.code).send();
+    return;
+  }
+  res.status(result.error.code).json({ message: result.error.msg });
 };

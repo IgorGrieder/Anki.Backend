@@ -1,4 +1,3 @@
-import { CreateUserInput } from "../../modules/user/common/user-types";
 import { jwtConstants } from "../constants/constants-module";
 import bcrypt from "bcrypt";
 
